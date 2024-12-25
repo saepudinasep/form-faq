@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ Selector</title>
+  </head>
+  <body>
+    <h1>FAQ Selector</h1>
+    <label for="sistem">Sistem:</label>
+    <select id="sistem">
+      <option value="">-- Pilih Sistem --</option>
+    </select>
+    <br /><br />
+
+    <label for="feature">Feature:</label>
+    <select id="feature" disabled>
+      <option value="">-- Pilih Feature --</option>
+    </select>
+    <br /><br />
+
+    <label for="kendala">Kendala:</label>
+    <select id="kendala" disabled>
+      <option value="">-- Pilih Kendala --</option>
+    </select>
+    <br /><br />
+
+    <label for="solusi">Solusi:</label>
+    <textarea id="solusi" rows="5" cols="50" readonly></textarea>
+
+    <script>
+      const sistemSelect = document.getElementById("sistem");
+      const featureSelect = document.getElementById("feature");
+      const kendalaSelect = document.getElementById("kendala");
+      const solusiTextarea = document.getElementById("solusi");
+
+      // Load JSON data from external file
+      fetch("output.json") // Replace with the correct path to your JSON file
+        .then((response) => response.json())
+        .then((data) => {
+          // Populate Sistem options
+          const sistemOptions = [...new Set(data.map((item) => item.Sistem))];
+          sistemOptions.forEach((sistem) => {
+            const option = document.createElement("option");
+            option.value = sistem;
+            option.textContent = sistem;
+            sistemSelect.appendChild(option);
+          });
+
+          // Populate Feature options based on Sistem
+          sistemSelect.addEventListener("change", () => {
+            featureSelect.innerHTML =
+              '<option value="">-- Pilih Feature --</option>';
+            kendalaSelect.innerHTML =
+              '<option value="">-- Pilih Kendala --</option>';
+            solusiTextarea.value = "";
+            featureSelect.disabled = !sistemSelect.value;
+            kendalaSelect.disabled = true;
+
+            if (sistemSelect.value) {
+              const features = [
+                ...new Set(
+                  data
+                    .filter((item) => item.Sistem === sistemSelect.value)
+                    .map((item) => item.Feature)
+                ),
+              ];
+              features.forEach((feature) => {
+                const option = document.createElement("option");
+                option.value = feature;
+                option.textContent = feature;
+                featureSelect.appendChild(option);
+              });
+            }
+          });
+
+          // Populate Kendala options based on Feature
+          featureSelect.addEventListener("change", () => {
+            kendalaSelect.innerHTML =
+              '<option value="">-- Pilih Kendala --</option>';
+            solusiTextarea.value = "";
+            kendalaSelect.disabled = !featureSelect.value;
+
+            if (featureSelect.value) {
+              const kendalas = data
+                .filter(
+                  (item) =>
+                    item.Feature === featureSelect.value &&
+                    item.Sistem === sistemSelect.value
+                )
+                .map((item) => item.Kendala);
+              kendalas.forEach((kendala) => {
+                const option = document.createElement("option");
+                option.value = kendala;
+                option.textContent = kendala;
+                kendalaSelect.appendChild(option);
+              });
+            }
+          });
+
+          // Show Solusi based on Kendala
+          kendalaSelect.addEventListener("change", () => {
+            const solusi = data.find(
+              (item) =>
+                item.Sistem === sistemSelect.value &&
+                item.Feature === featureSelect.value &&
+                item.Kendala === kendalaSelect.value
+            )?.Solusi;
+            solusiTextarea.value = solusi || "";
+          });
+        })
+        .catch((error) => console.error("Error loading JSON data:", error));
+    </script>
+  </body>
+</html>

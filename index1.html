@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ Selector</title>
+  </head>
+  <body>
+    <h1>FAQ Selector</h1>
+    <label for="sistem">Sistem:</label>
+    <select id="sistem">
+      <option value="">-- Pilih Sistem --</option>
+    </select>
+    <br /><br />
+
+    <label for="feature">Feature:</label>
+    <select id="feature" disabled>
+      <option value="">-- Pilih Feature --</option>
+    </select>
+    <br /><br />
+
+    <label for="kendala">Kendala:</label>
+    <select id="kendala" disabled>
+      <option value="">-- Pilih Kendala --</option>
+    </select>
+    <br /><br />
+
+    <label for="solusi">Solusi:</label>
+    <textarea id="solusi" rows="5" cols="50" readonly></textarea>
+
+    <script>
+      const data = [
+        {
+          No: 1,
+          Sistem: "KI",
+          Feature: "Notifikasi Error KI saat Submit",
+          Kendala:
+            "tampil keterangan (Prospect_Stat_Not_Valid) & status Failed Prospect_Stat_Not_Valid di inquiry KI",
+          Solusi: "biom",
+        },
+        {
+          No: 2,
+          Sistem: "KI",
+          Feature: "Asset Data",
+          Kendala: "Autofill OTR kosong (NDS)",
+          Solusi:
+            "1. PIC melakukan koordinasi dengan tim marketing HO untuk pengecekan pada master data OTR\n2. Jika OTR sudah ada di master data, maka pastikan pemilihan LOB dan POT sudah benar\n3. Jika pemilihan LOB dan POT sudah benar, maka PIC input berkoordinasi dengan atasan langsung untuk mengajukan tiket ISR\n4. Jika OTR belum ada di master data, maka cabang dapat mengajukan inject OTR ke marketing HO",
+        },
+        {
+          No: 3,
+          Sistem: "KI",
+          Feature: "Asset Data",
+          Kendala: "Type asset tidak ada",
+          Solusi:
+            "1. PIC melakukan koordinasi dengan tim marketing HO untuk pengecekan pada master data kendaraan dan settingan \n2. Jika type sudah ada pada master data kendaraan dan settingan sudah sesuai namun type tidak tampil, maka ajukan tiket ISR\n3. Jika type tidak terdapat pada master data kendaraan, maka ajukan penambahan data type kendaraaan ke marketing HO",
+        },
+        {
+          No: 4,
+          Sistem: "KI",
+          Feature: "Asset Data",
+          Kendala: "Tahun Kendaraan tidak ada",
+          Solusi:
+            "1. PIC melakukan koordinasi dengan tim marketing HO untuk pengecekan pada master data tahun kendaraan dan settingan \n2. Jika tahun kendaraan sudah ada pada master data kendaraan dan settingan sudah sesuai namun tahun tidak tampil, maka ajukan tiket ISR\n3. Jika tahun kendaraan tidak terdapat pada master data kendaraan, maka ajukan penambahan data type kendaraaan ke marketing HO",
+        },
+        {
+          No: 8,
+          Sistem: "KI",
+          Feature: "Asset Data",
+          Kendala: "Model Type tidak ada",
+          Solusi:
+            "1. PIC melakukan koordinasi dengan tim marketing HO untuk pengecekan pada master data kendaraan dan settingan \n2. Jika type sudah ada pada master data kendaraan dan settingan sudah sesuai namun type tidak tampil, maka ajukan tiket ISR atau bisa mencoba pada device lain\n3. Jika type tidak terdapat pada master data kendaraan, maka ajukan penambahan data type kendaraaan ke marketing HO",
+        },
+        {
+          No: 5,
+          Sistem: "KI",
+          Feature: "Alamat tidak tampil",
+          Kendala:
+            "Alamat konsumen tidak tampil, pilihan provinsi tidak ada pilihan yang tampil",
+          Solusi:
+            "1. PIC melakukan koordinasi dengan tim Collection Cabang untuk pengecekan pada master data alamat\n2. Jika alamat terdaftar pada master data, maka mengajukan tiket ISR untuk menambahkan coverage area\n3. Jika alamat tidak terdapat pada master data, maka ajukan IM Pendaftaran KAT dengan approval ke Division Head Credit dan Sub Division Head Collection",
+        },
+        {
+          No: 6,
+          Sistem: "KI",
+          Feature: "SOA & Referantor",
+          Kendala:
+            "Mekanisme Penginputan aplikasi via KI dengan referensi Teller",
+          Solusi:
+            "1. Pastikan teller sudah terdaftar sebagai referantor \n2. Aplikasi akan diinput oleh CS, pastikan CS mempunyai role FL\n3. Penginputan aplikasi mengikuti kondisi as is dengan tambahan informasi pada field Notes diisi dengan ketentuan:\n- Referantor 1\n- Nama: Nama Teller\n- NIK: 123456\n- Jabatan: Teller\n4. Proses survey mengikuti kondisi as is\n5. Pada saat penginputan aplikasi (NAP) CAC akan melakukan perubahan referantor berdasarkan notes yang ada pada KI",
+        },
+        {
+          No: 7,
+          Sistem: "KI",
+          Feature: "Biometrik",
+          Kendala:
+            "Standarisasi Pengambilan Foto Biometrik (Customer\/Spouse\/Guarantor)",
+          Solusi:
+            "Hal yang perlu dipastikan saat pengambilan foto:\n1. Foto tersebut adalah benar foto yang bersangkutan (Customer\/Spouse\/Guarantor)\n2. Posisi pada frame foto hanya wajah (tampilan foto seperti foto di KTP\/Pas Foto)\n3. Foto tidak buram\n4. Foto wajah tidak terpotong \n5. Foto dengan pencahayaan baik\/terang secara merata\n6. Backgound pada foto usahakan tidak ada orang\/benda yang dapat mengganggu hasil",
+        },
+        {
+          No: 13,
+          Sistem: "KI",
+          Feature: "No Telepon",
+          Kendala: "Pasangan dan atau Guarantor tidak memilki No Telepon",
+          Solusi:
+            "1. Hanya berlaku jika kondisi actual pasangan\/guarantor MEMANG tidak memiliki no HP\n2. Field No telp pasangan\/guarantor di entry point wajib diisi 0811-0000-0000\n3. Team Surveyor (Mkt) wajib konfirmasi ke customer pada saat survey, jika ditemukan ada ketidaksesuaian (pasangan\/guarantor memiliki no hp) maka akan menjadi catatan khusus & teguran bagi inputer",
+        },
+        {
+          No: 14,
+          Sistem: "KI",
+          Feature: "Telestatus",
+          Kendala: "Result telestatus (inactive\/ invalid)",
+          Solusi:
+            "1. PIC melakukan validasi no telepon customer secara manual dengan cara menelpon terlebih dahulu untuk memastikan nomer tersebut aktif\n2. Pastikan kembali no telepon yang di input di entry point sudah benar\n3. Jika kedua langkah diatas sudah dilakukan tetapi result inactive aplikasi pengajuan tetap dapat dilanjutkan dengan kondisi berikut :\n- Telepon masuk dan diangkat \n- Telepon tidak masuk",
+        },
+        {
+          No: 15,
+          Sistem: "KI",
+          Feature: "Login KI",
+          Kendala:
+            'Tidak dapat login \/ tampil warning "Invalid ID or Password" atau "Login Failed, Please Check your USerID and Password"',
+          Solusi:
+            "1. Patikan User masih aktif secara data HC\n2. Pastikan user ID dan password yang diinput sudah benar\n3. Cek versi APK, pastikan versi yang terinstall adalah versi terupdate\/benar\n4. Apabila tidak bisa login di web mobile, ajukan tiket untuk reset password melalui Wom Ticket - FRUID",
+        },
+        {
+          No: 16,
+          Sistem: "KI",
+          Feature: "Karyawan sebagai Referantor belum terdaftar",
+          Kendala:
+            "Tidak dapat input NIK KTP Customer dengan keterangan 'referantor tidak terdaftar'",
+          Solusi:
+            "Terdapat dua kondisi PIC yang tidak dapat input NIK KTP Customer dengan dengan keterangan 'referantor tidak terdaftar'\n1. PIC yang belum terdaftar sebagai referantor maka lakukan koordinasi dengan BMH\/BH\/KH untuk dilakukan register di WISe. Berikut tahapan register referantor di WISe :\n- Pilih menu referantor\n- Pilih add referantor\n- Isi field Nama\n- Isi field NIK Karyawan\n- Isi field Tempat & tgl lahir\n- Isi field No Telp\n- Isi field Alamat KTP\n- Isi field data buku tabungan karyawan\n*field yg mandatory wajib di isi (ada tanda bintang warna merah)\n2. PIC yang sudah terdaftar tetapi tidak dapat login, harap di informasikan ke marketing NDS HO dengan mengirimkan email untuk dilakukan pengeditan NIK KTP menjadi NIK karyawan",
+        },
+        {
+          No: 17,
+          Sistem: "KI",
+          Feature: "Role KI",
+          Kendala: "Role tidak sesuai dengan jabatan atau tidak ada",
+          Solusi:
+            "PIC konfirmasi dengan atasan langsung untuk pengajuan tiket melalui Wom Ticket - FRUID (dapat dilakukan secara kolektif)",
+        },
+        {
+          No: 18,
+          Sistem: "KI",
+          Feature: "Submit KI",
+          Kendala: "Gagal Submit pengajuan",
+          Solusi:
+            "Berikut solusi yang harus dilakukan secara berurutan sampai dengan solve :\n1. Pastikan kondisi jaringan\/sinyal provider stabil\n2. Clear cache dan input ulang \n3. Lakukan restart handphone \n4. Jika ketiga opsi diatas masih terdapat kendala maka lakukan install ulang aplikasi",
+        },
+        {
+          No: 19,
+          Sistem: "KI",
+          Feature: "Error KI",
+          Kendala:
+            'Terjadi Crash "Oops! There\'s an error" setelah submit baik di layer 2 atau 3',
+          Solusi:
+            "1. Pastikan semua field Mandatory terisi\n2. Pastikan kembali field notes terisi dan tidak melebihi jumlah karakter yang disediakan",
+        },
+        {
+          No: 20,
+          Sistem: "KI",
+          Feature: "Submit KI",
+          Kendala: "Aplikasi Tidak tampil di POLO setelah submit KI",
+          Solusi:
+            "Berikut hal yang perlu diperhatikan :\n1. Lakukan pengecekan pada inquiry KI status aplikasi on process, jika status failed maka tidak akan tercatat di POLO\n2. Cek kembali pada saat melakukan pencarian di POLO untuk field nama\/No KWN sudah sesuai\n3. Pastikan SMS persetujuan biro kredit sudah dilakukan approval oleh konsumen\n4. Jika langkah diatas sudah dilakukan dan aplikasi tetap tidak tampil di POLO dalam waktu 20 menit, maka ajukan tiket ISR",
+        },
+        {
+          No: 21,
+          Sistem: "KI",
+          Feature: "Submit KI",
+          Kendala: "POLO step kosong setelah submit KI",
+          Solusi:
+            "1. Pastikan pemilihan POT sudah benar\n2. Pastikan hasil validasi data diri tidak terdapat fatal score\n3. Pastikan nomer HP tidak kosong dan tidak ada simbol\/karakter dalam inputan\n3. Jika sudah dipastikan kedua langkah diatas bukan menjadi penyebab POLO step kosong, maka ajukan tiket ISR\n4. Lakukan input ulang jika terdapat kesalahan pemilihan POT atau terdapat fatal score pada validasi data diri",
+        },
+        {
+          No: 22,
+          Sistem: "KI",
+          Feature: "List Dealer",
+          Kendala: "Nama Dealer tidak tampil",
+          Solusi:
+            "1. PIC melakukan koordinasi dengan tim marketing HO untuk pengecekan status dealer \n2. Jika status dealer tidak aktif, maka request untuk diaktifkan kembali\n3. Jika status dealer aktif, maka lakukan install ulang KI dan input ulang aplikasi",
+        },
+        {
+          No: 23,
+          Sistem: "KI",
+          Feature: "SMS Pengecekan History Credit",
+          Kendala:
+            'Link SMS persetujuan Pengecekan History Credit tidak dapat diklik \/ tampil notifikasi "Data Already Submit" \/ "Data Not Found" \/ "Data Tidak Ditemukan" \/ "Data Not Valid"',
+          Solusi:
+            "1. Pastikan pernyataan persetujuan pengecekan History Credit di submit tidak melebihi SLA yang ditentukan yaitu 20 menit\n2. Jika pernyataan persetujuan pengecekan History Credit disubmit melebihi SLA yang ditentukan, maka aplikasi dapat tetap dilanjutkan dan pengecekan History Credit akan dilakukan dibelakang",
+        },
+        {
+          No: 24,
+          Sistem: "KI",
+          Feature: "Role KI",
+          Kendala: "Tampil warning \u201cuser has no role\u201c",
+          Solusi:
+            "1. Cek kesesuaian data PIC didata orange\n2. Lakukan login Web MSS\n3. Jika berhasil login di web MSS tetapi tidak berhasil login di KI, maka ajukan tiket FRUID untuk aktivasi user di aplikasi KI \n4. Jika tidak berhasil login di web MSS dan di KI, maka ajukan tiket FRUID untuk aktivasi user tersebut pada aplikasi yang akan digunakan",
+        },
+        {
+          No: 25,
+          Sistem: "KI",
+          Feature: "Error KI",
+          Kendala:
+            "Tampil keterangan Error (500) : error occured setelah klik check pada saat pengecekan NIK KTP",
+          Solusi:
+            "Berikut solusi yang harus dilakukan secara berurutan sampai dengan solve :\n1. Pastikan kondisi jaringan\/sinyal provider stabil\n2. Clear cache dan input ulang \n3. Lakukan restart handphone \n4. Jika ketiga opsi diatas masih terdapat kendala maka lakukan install ulang aplikasi",
+        },
+        {
+          No: 26,
+          Sistem: "KI",
+          Feature: "Take\/ Upload Doc",
+          Kendala:
+            "Diaplikasi KI saat upload foto KTP terlogout secara automatis",
+          Solusi:
+            "Berikut solusi yang harus dilakukan secara berurutan sampai dengan solve :\n1. Pastikan kondisi jaringan\/sinyal provider stabil\n2. Clear cache dan input ulang \n3. Lakukan restart handphone \n4. Jika ketiga opsi diatas masih terdapat kendala maka lakukan install ulang aplikasi",
+        },
+        {
+          No: 27,
+          Sistem: "KI",
+          Feature: "Dukcapil",
+          Kendala: "Hasil pengecekan dukcapil not match\/not found",
+          Solusi:
+            "1. Cek hasil autofill OCR foto KTP pastikan sudah sesuai dengan data KTP (nama, NIK, tempat & tgl lahir)\n2. Jika data sudah sesuai KTP namun hasil pengecekan dukcapil not match\/ not found, lakukan pengecekan data diri melalui web dukcapil\n3. Jika terdapat perbedaan data diri pada KTP dan web dukcapil maka perlu dilakukan update data Dukcapil terlebih dahulu. Jika sudah dilakukan update data pada dukcapil namun masih terflag not match maka lakukan clear cache \/instal ulang Kawan Internal",
+        },
+        {
+          No: 28,
+          Sistem: "KI",
+          Feature: "Dukcapil",
+          Kendala: "Dukcapil Error failed process",
+          Solusi:
+            "1. Laporkan kendala pada group masing-masing dengan menggunakan template laporan kendala \n2. Ajukan ticket ISR",
+        },
+        {
+          No: 29,
+          Sistem: "KI",
+          Feature: "Take \/ Upload Doc",
+          Kendala: "Gagal take \/ upload KTP",
+          Solusi:
+            "1. Pastikan foto yang di take \/ upload adalah KTP tidak rusak dan tidak buram\n2. Jika KTP rusak atau buram harus di perbaiki terlebih dahulu",
+        },
+        {
+          No: 30,
+          Sistem: "KI",
+          Feature: "Negative List",
+          Kendala: "Pemohon\/Pasangan\/Guarantor terkena Negative List",
+          Solusi:
+            "1. Pengajuan BA, Approval hingga BU Head\nberikut format BA Whitelist https:\/\/docs.google.com\/spreadsheets\/d\/1tEJ8rn6dpYST1x8TUxusJ4VVYZvzBy9R\/edit#gid=1650607626 \n2. Pengajuan Email ke Risk Management Division (fhidayat@wom.co.id, Snugraha@wom.co.id dan Jdarung@wom.co.id ) dengan melampirkan link Berita Acara yang sudah full approved.\n3. Mekanisme Pengajuan Whitelist mengikuti SK yang berlaku. Link SK : https:\/\/docs.google.com\/document\/d\/1CHmh194A8_nD7L0h_qE5U7ooku2yaAPGHyeFAWqHPmU\/edit \n4 Mengisi Logbook yang disediakan per regional",
+        },
+        {
+          No: 31,
+          Sistem: "KI",
+          Feature: "Top Up Via KI",
+          Kendala: "Aplikasi tidak bisa di Top Up",
+          Solusi:
+            '1. Pilih Pengajuan Baru\n2. Notes pada KI wajib diisi keterangan "Pengajuan Top Up atas agreement XXX (Input No Agreement yang akan ditop up)"',
+        },
+        {
+          No: 32,
+          Sistem: "KI",
+          Feature: "Input Pengajuan",
+          Kendala:
+            "Gagal Submit Pengajuan dengan kondisi submit diatas jam EOD (System OFF)",
+          Solusi:
+            "1. Mohon untuk tidak melakukan submit melewati jam OFF System WISe\/ System sedang OFF\n2. Input pengajuan bisa dilakukan saat system sudah ON kembali",
+        },
+        {
+          No: 33,
+          Sistem: "KI",
+          Feature: "Input Pengajuan",
+          Kendala: "Pasangan tidak ikut tandatangan",
+          Solusi:
+            "1. Uncheck checkbox melibatkan Pasangan pada Layer 1 Kawan Internal\n2. Upload form pernyataan pasangan tidak ikut tanda tangan kredit\n3. Isi data diri pasangan\n4. Field Foto KTP Pasangan dan Biometric tidak perlu dilengkapi",
+        },
+        {
+          No: 35,
+          Sistem: "KI",
+          Feature: "Referantor tidak terdaftar",
+          Kendala:
+            "Muncul notifikasi Referantor tidak terdaftar tetapi PIC sudah memiliki referantor di WISe",
+          Solusi:
+            "1. Cek apakah :\n- ID Type sudah sesuai\n- NIK sudah sesuai\nSeharusnya :\n- ID Type : NIK\n- NIK : NIK Karyawan\n2. Jika belum sesuai, lakukan koordinasi dengan Tim Mkt HO untuk edit referantor",
+        },
+        {
+          No: 36,
+          Sistem: "WISE",
+          Feature: "Referantor Tidak Muncul",
+          Kendala: "No Referantor Marketing Agent tidak muncul pada WISe",
+          Solusi:
+            "Kode dan Nama Referantor MA pada Field Reff 2 di Kawan Internal tidak diinput",
+        },
+        {
+          No: 37,
+          Sistem: "KI",
+          Feature: "Nomor RT\/RW",
+          Kendala: "Alamat tidak Memiliki No RT\/RW",
+          Solusi:
+            "Jika alamat legal atau alamat survey tidak memiliki RT\/RW input dengan angka Nol (0)\n\nNotes :\nJika terjadi stopper karena inputan yang tidak sesuai ajukan Ticket ISR dengan request untuk dilakukan deleted pengajuan, setelah pengajuan terdelete lakukan input ulang pengajuan",
+        },
+        {
+          No: 38,
+          Sistem: "KI",
+          Feature: "Referantor 2 SOA Channel (Mediator)",
+          Kendala:
+            "Penginputan Kode dan Nama Referantor pada field Referantor 2 Kawan Internal",
+          Solusi:
+            "MAO Wajib input Kode dan Nama Referantor pada field Referantor 2 Kawan Internal karena jika tidak diinput maka sampai selesai field Referantor 2 akan kosong",
+        },
+        {
+          No: 9,
+          Sistem: "MSS",
+          Feature: "Biometrik",
+          Kendala:
+            "Standarisasi Pengambilan Foto Biometrik (Customer\/Spouse\/Guarantor)",
+          Solusi:
+            "Pastikan saat pengambilan foto\n1. Foto tersebut adalah benar foto yang bersangkutan (Customer\/Spouse\/Guarantor)\n2. Posisi pada frame foto hanya wajah (tampilan foto seperti foto di KTP\/Pas Foto)\n3. Foto tidak buram\n4. Foto wajah tidak terpotong \n5. Foto dengan pencahayaan baik\/terang secara merata",
+        },
+        {
+          No: 10,
+          Sistem: "MSS",
+          Feature: "Input Pengajuan",
+          Kendala:
+            "Gagal Submit Pengajuan dengan kondisi submit diatas jam EOD (System OFF)",
+          Solusi:
+            "1. Mohon untuk tidak melakukan submit melewati jam OFF System WISe\/ System sedang OFF\n2. Lakuikan Save Task terlebih dahulu pada step CMO Recommendation\n2. Submit task bisa dilakukan saat system sudah ON kembali",
+        },
+        {
+          No: 40,
+          Sistem: "MSS",
+          Feature: "Dukcapil",
+          Kendala: "Hasil pengecekan dukcapil not match\/not found",
+          Solusi:
+            "1. Cek hasil autofill OCR foto KTP pastikan sudah sesuai dengan data KTP (nama, NIK, tempat & tgl lahir)\n2. Jika data sudah sesuai KTP namun hasil pengecekan dukcapil not match\/ not found, lakukan pengecekan data diri melalui web dukcapil\n3. Jika terdapat perbedaan data diri pada KTP dan web dukcapil maka input ulang data diri berdasarkan data yang terdapat pada web dukcapil",
+        },
+        {
+          No: 41,
+          Sistem: "MSS",
+          Feature: "Dukcapil",
+          Kendala: "Dukcapil Error failed process",
+          Solusi:
+            "1. Coba lakukan Submit Ulang Layer 1 sampai dengan kesempatan pengecekan ulang dukcapil habis\n2. Jika setelah dicoba submit ulang masih muncul error yg sama laporkan kendala pada group masing-masing dengan menggunakan template laporan kendala paralel dilakukan pengajuan ticket ISR",
+        },
+        {
+          No: 42,
+          Sistem: "MSS",
+          Feature: "Take \/ Upload Doc",
+          Kendala: "Gagal take \/ upload KTP",
+          Solusi:
+            "1. Pastikan foto yang di take \/ upload adalah KTP tidak rusak dan tidak buram\n2. Jika KTP rusak atau buram harus di perbaiki terlebih dahulu",
+        },
+        {
+          No: 43,
+          Sistem: "MSS",
+          Feature: "Login MSS",
+          Kendala:
+            'Tidak dapat login MSS \/ tampil warning "Invalid ID or Password" atau \n"Login Failed, Please Check your UserID and Password"',
+          Solusi:
+            "1. Pastikan user ID dan password yang diinput sudah benar \n2. Cek versi APK, pastikan versi yang terinstall adalah versi terupdate\/benar\n3. Gunakan user ID dan password untuk login di web mobile\n4. Apabila tidak bisa login di web mobile, ajukan tiket untuk reset password melalui Wom Ticket - FRUID",
+        },
+        {
+          No: 45,
+          Sistem: "MSS",
+          Feature: "Unassign\/Assign Manual MSS",
+          Kendala: "Aplikasi tidak tampil di menu unassign",
+          Solusi:
+            "1. Pastikan Task sudah terunassign dengan mengecek history task pada Web MSS\n2. Jika status task sudah Unassigned cek pada menu unassign atasan langsung PIC Input\n3. Jika tidak tampil pada menu Atasan Langsung PIC Input, cek task menggunakan login Branch Head",
+        },
+        {
+          No: 46,
+          Sistem: "MSS",
+          Feature: "Unassign\/Assign Manual MSS",
+          Kendala: "Cara Melakukan Unassign\/Assign Manual",
+          Solusi:
+            '1. Copy ODRNO aplikasi yang akan dilakukan assign manual dari Polo\n2. Atasan langsung\/Branch Head PIC yang menerima Task terakhir login ke web MSS\n3. Klik menu UnAssign Task By Branch (SPV) \n4. Klik advance search\n5. Search by customer name diubah menjadi Application ID, lalu masukkan ODRNO\n6. Pilih field Form dan diubah menjadi Form ... Form task Promise to Survey \n7. Lalu klik search\n8. Pilih aplikasi yang akan dilakukan Assign manual\n9. Pilih Supervisor "Select All" \n10. Pilih "Assign to" ke PIC yang ingin diAssign\n11. Pilih Priority sesuai kebutuhan\n12. Lalu klik "Save"',
+        },
+        {
+          No: 47,
+          Sistem: "MSS",
+          Feature: "Input Pengajuan",
+          Kendala: "Ketidak sempuranaan Autofill\/Task Error",
+          Solusi:
+            "Jika terjadi seperti ini biasa terjadi karena download task kurang sempurna, lakukan :\n1. Klik save di button kiri bawah jika tidak bisa di save back dulu (seperti input task baru)\n2. Lakukan input survey ulang task presurvey (tidak usah input sampai selesai jika tampil 1 pertanyaan sudah bisa klik save lakukan save task tersebut) \n3. Setelah dilakukan save pilih main menu dari pojok kiri atas\n4. Pilih task list\n5. Pilih tab status\n6. Task yang tadi sudah di save, klik dan tahan sampai tampil pilihan delete\n7. Kemudian task akan terdelete dan task akan generate\/download ulang\n8. Jika masih terjadi kesalahan yang sama, maka ulangi kembali step dari awal\n9. Jika setelah diulangi masih terjadi hal yang sama maka lakukan install ulang aplikasi MSS\n\nSebelum memproses task mohon dipastikan indikator berupa titik pada kanan atas task sudah berwarna hijau jika masih berwarna hitam artinya masih melakukan donwload issuenya di karenakan download task tidak sempurna. Apabila masih terdapat kendala silahkan lakukan menggunakan device lain",
+        },
+        {
+          No: 48,
+          Sistem: "MSS",
+          Feature: "Input Pengajuan",
+          Kendala: 'Field Is Piloting CAE terdefault "Tidak"',
+          Solusi:
+            "Jika terjadi seperti ini biasa terjadi karena download task kurang sempurna, lakukan :\n1. Klik save di button kiri bawah jika tidak bisa di save back dulu (seperti input task baru)\n2. Lakukan input survey ulang task presurvey (tidak usah input sampai selesai jika tampil 1 pertanyaan sudah bisa klik save lakukan save task tersebut) \n3. Setelah dilakukan save pilih main menu dri pojok kiri atas\n4. Pilih task list\n5. Pilih tab status\n6. Task yang tadi sudah di save, klik dan tahan sampai tampil pilihan delete\n7. Kemudian task akan terdelete dan task akan generate\/download ulang\n8. Jika masih terjadi kesalahan yang sama, maka ulangi kembali step dari awal\n9. Jika setelah diulangi masih terjadi hal yang sama maka lakukan install ulang aplikasi MSS\n\nSebelum memproses task mohon dipastikan indikator berupa titik pada kanan atas task sudah berwarna hijau jika masih berwarna hitam artinya masih melakukan donwload issuenya di karenakan download task tidak sempurna. Apabila masih terdapat kendala silahkan lakukan menggunakan device lain",
+        },
+        {
+          No: 49,
+          Sistem: "MSS",
+          Feature: "Geotagging",
+          Kendala: "Geo Tag Error",
+          Solusi:
+            "Jika terjadi seperti ini biasa terjadi karena download task kurang sempurna, lakukan :\n1. Klik save di button kiri bawah jika tidak bisa di save back dulu (seperti input task baru)\n2. Lakukan input survey ulang task presurvey (tidak usah input sampai selesai jika tampil 1 pertanyaan sudah bisa klik save lakukan save task tersebut) \n3. Setelah dilakukan save pilih main menu dri pojok kiri atas\n4. Pilih task list\n5. Pilih tab status\n6. Task yang tadi sudah di save, klik dan tahan sampai tampil pilihan delete\n7. Kemudian task akan terdelete dan task akan generate\/download ulang\n8. Jika masih terjadi kesalahan yang sama, maka ulangi kembali step dari awal\n\nSebelum memproses task mohon dipastikan indikator berupa titik pada kanan atas task sudah berwarna hijau jika masih berwarna hitam artinya masih melakukan donwload issuenya di karenakan download task tidak sempurna. Apabila masih terdapat kendala silahkan lakukan menggunakan device lain",
+        },
+        {
+          No: 50,
+          Sistem: "MSS",
+          Feature: "Pengecekan History Credit",
+          Kendala: "Hasil pengecekan hidtory credit kosong \/ tidak ditemukan",
+          Solusi:
+            "1. Pastikan jika pada saat penginputan KI checklistbox pada layer 1 tidak di ceklis\n2. Jika penginputan KI dilakukan sampai sampai layer 2 pastikan link SMS yang dikirimkan sudah diapproved \n3. Pengecekan adalah dilakukan kembali pada hit point selanjutnya dan proses tetap dapat dilanjutkan (tidak menjadi stopper)",
+        },
+        {
+          No: 51,
+          Sistem: "MSS",
+          Feature: "Input Pengajuan",
+          Kendala:
+            "Task Completed\/Task Survey (Taask Foto & Task Text) tidak muncul setelah submit Pre Survey (Terdapat Task Foto dan Task Teks yg statusnya Deleted)",
+          Solusi:
+            "Masuk ke menu inquiry task web MSS dan cek status task pre-survey yang disubmit apakah sudah released\/uploading\/failed submit dengan action berikut :\n- Jika status task uploading\/failed submit lakukan Force Sent \n- Jika sudah released dan task belum tampil lakukan syncronize pada MSS \n\nApabila list task yang muncul di menu inquiry task by branch adalah :\n- Task Promise to Survey Released\n- Task Pre Survey Released\n- Task Survey (Foto & Teks) yg statusnya Deleted (Task Offline)\n\nyg perlu dilakukan :\n1. Cek kesesuaian data inputan. Contoh : nomor telepon pasangan dan atau guarantor (jangan diinput 0 karena menyebabkan stopper)\n2. Lakukan pengecekan\/validasi data di POLO dan Web MSS untuk mengetahui detail aplikasi pengajuan. Adapun penanganan selanjutnya mengikuti result validasi berikut :\n- jika result validasi tidak terdapat fatal score, maka PIC cabang melakukan koordinasi dengan tim HO\n- jika result validasi terdapat fatal score, maka proses input ulang aplikasi mengikuti kategori fatal score\n\nNotes :\nTask Survey yg statusnya Deleted adalah Task Offline yang otomatis terhapus saat Task Pre Survey berhasil disubmit dalam keadaan online",
+        },
+        {
+          No: 52,
+          Sistem: "MSS",
+          Feature: "Input Pengajuan",
+          Kendala:
+            "SOA\/Product Catagory tidak terautofill \/ kosong\/ Field Pre Survey tidak terautofill",
+          Solusi:
+            "Jika terjadi seperti ini biasa terjadi karena download task kurang sempurna, lakukan :\n1. Klik save di button kiri bawah jika tidak bisa di save back dulu (seperti input task baru)\n2. Lakukan input survey ulang task presurvey (tidak usah input sampai selesai jika tampil 1 pertanyaan sudah bisa klik save lakukan save task tersebut) \n3. Setelah dilakukan save pilih main menu dri pojok kiri atas\n4. Pilih task list\n5. Pilih tab status\n6. Task yang tadi sudah di save, klik dan tahan sampai tampil pilihan delete\n7. Lakukan delete task dan task akan terdownload ulang\n8. Lakukan Clear Cache\n9. Setelah Clear Cache Lakukan Input ulang task yang didelete\n10. Jika masih kejadian, ulangi kembali dari step awal\n11. Jika setelah diulangi masih terjadi hal yang sama maka lakukan install ulang aplikasi MSS\n\nNotes :\nUntuk memproses task mohon dipastikan indikator berupa titik pada kanan atas task sudah berwarna hijau jika masih berwarna hitam artinya masih melakukan donwload issuenya di karenakan download task tidak sempurna. Apabila masih terdapat kendala silahkan lakukan menggunakan device lain",
+        },
+        {
+          No: 53,
+          Sistem: "MSS",
+          Feature: "No telepon Pasangan dan atau Guarantor",
+          Kendala: "Pasangan dan atau Guarantor tidak memilki No Telepon",
+          Solusi:
+            "1. Hanya berlaku jika kondisi actual pasangan\/guarantor MEMANG tidak memiliki no HP\n2. Field No telp pasangan\/guarantor di entry point wajib diisi 0811-0000-0000\n3. Team Surveyor (Mkt) wajib konfirmasi ke customer pada saat survey, jika ditemukan ada ketidaksesuaian (pasangan\/guarantor memiliki no hp) maka akan menjadi catatan khusus & teguran bagi inputer",
+        },
+        {
+          No: 54,
+          Sistem: "MSS",
+          Feature: "Maskapai Asuransi",
+          Kendala:
+            "Maskapai asuransi tidak terautofill \/ Tidak muncul pilihan",
+          Solusi:
+            "1. Klik save di button kiri bawah jika tidak bisa di save back dulu (seperti input task baru)\n2. Lakukan input survey ulang task presurvey (tidak usah input sampai selesai jika tampil 1 pertanyaan sudah bisa klik save lakukan save task tersebut) \n3. Setelah dilakukan save pilih main menu dri pojok kiri atas\n4. Pilih task list\n5. Pilih tab status\n6. Task yang tadi sudah di save, klik dan tahan sampai tampil pilihan delete\n7. Lakukan delete task dan task akan terdownload ulang\n8. Lakukan Clear Cache\n9. Setelah Clear Cache Lakukan Input ulang task yang didelete\n10. Jika masih kejadian, laporkan kendala pada group masing-masing dengan menggunakan template laporan kendala \n11. Ajukan ticket ISR",
+        },
+        {
+          No: 55,
+          Sistem: "MSS",
+          Feature: "Submit Task",
+          Kendala: "Status Task tidak berubah (Uploading)",
+          Solusi:
+            "1. Pastikan kondisi jaringan\/sinyal provider stabil\n2. Pilih task list\n3. Pilih tab status\n4. Tekan beberapa saat task yang gagal submit\n5. Klik Force Sent\n6. Jika langkah diatas sudah dijalankan tetapi masih terdapat kendala maka ajukan ISR",
+        },
+        {
+          No: 56,
+          Sistem: "MSS",
+          Feature: "Submit Task",
+          Kendala: "No APP tidak terbentuk setelah submit Task Survey",
+          Solusi:
+            "1. Buka web MSS dan pastikan task sudah dikerjakan dan tersubmit \n2. Pastikan semua task sudah release. Berikut status yang harus diperhatikan :\n- Pending : Task belum selesai dikerjakan (release) dan PIC harus submit seluruh task\n- Uploading : Task belum selesai di upload dan PIC harus update secara berkala (refresh inquiry web MSS), jika dalam waktu tertentu status masih Uploading lakukan Force Sent\n- Waiting on pending confins : Task belum dilakukan approval on WOM atau approval on data entry dan PIC harus confirm ke function terkait \n3. Jika langkah diatas sudah dijalankan tetapi masih terdapat kendala maka ajukan ISR",
+        },
+        {
+          No: 57,
+          Sistem: "MSS",
+          Feature: "Submit Task",
+          Kendala: 'Muncul Notifikasi "Failed Submit Task"',
+          Solusi:
+            "Lakukan Re-Upload dengan cara :\n1. Pastikan kondisi jaringan\/sinyal provider stabil\n2. Klik ikon 'Garis Tiga' di pojok kanan atas\n3. Setelah tampil main menu, klik Task List\n4. Klik Status dan pilih task yang ingin di reupload\n5. Lalu klik send\n6. Jika langkah diatas sudah dijalankan tetapi masih terdapat kendala maka ajukan ISR",
+        },
+        {
+          No: 58,
+          Sistem: "MSS",
+          Feature: "Waktu Penginputan",
+          Kendala:
+            "Server OFF saat survey sedang berjalan (Lewat dari jam 20.00)",
+          Solusi:
+            "1. Selesaikan inputan task yang sedang berjalan\n2. Lakukan submit task dan pada saat server sudah ON task akan terkirim otomatis\n3. Jika tidak terkirim otomatis maka lakukan force send",
+        },
+        {
+          No: 59,
+          Sistem: "MSS",
+          Feature: "Task OTS",
+          Kendala: "Task OTS BM Tidak turun",
+          Solusi:
+            "Koordinasi dengan tim credit untuk melakukan request penurunan task OTS manual melalui menu logbook credit",
+        },
+        {
+          No: 60,
+          Sistem: "MSS",
+          Feature: "Input Pengajuan",
+          Kendala:
+            'Muncul error "Terjadi kesalahan, silahkan coba kembali" atau "An error occured for this requests, please try again".',
+          Solusi:
+            "Lakukan Install Ulang MSS, tetapi perlu diperhatikan nantinya task yang masih dalam proses pengerjaan akan terhapus sehingga PIC harus mengerjakan ulang task tersebut",
+        },
+        {
+          No: 63,
+          Sistem: "MSS",
+          Feature: "Stuck Task CAE",
+          Kendala:
+            "Aplikasi berhenti di task CAE pada step task survey (task completed\/task text) dikarenakan no telp pasangan dan atau guarantor diinput '0'",
+          Solusi:
+            'Ajukan ticket ISR dan request untuk dilakukan delete pengajuan yang Stuck, setelah pengajuan terdelete lakukan input ulang dengan ketentuan penginputan utuk pasangan dan atau guarantor yang tidak memiliki no telepon yaitu "0811-0000-0000"',
+        },
+        {
+          No: 64,
+          Sistem: "MSS",
+          Feature: "Delete Task",
+          Kendala:
+            "Sudah dilakukan delete task pada Web MSS namun status pengajuan di POLO Masih Prospek sehingga pengajuan khusus kons RO tidak bisa dilakukan Input Ulang",
+          Solusi:
+            'Ajukan ticket ISR untuk dilakukan pengembalian Wokflow\n\n1. Jangan melakukan delete task melalui menu "Delete task by Branch" Web MSS karena task yang terdelete hanya task salah satu task dan menyebabkan pengajuan tetap akan menggantung (belum ada status Final).\n2. Untuk memberikan Result Final pengajuan yang akan di input ulang lakukan lanjutkan penginputan task dengan memilih "YES" pada field "Is Cancel APP ?".',
+        },
+        {
+          No: 67,
+          Sistem: "MSS",
+          Feature: "Submit Layer",
+          Kendala:
+            'Muncul Notifikasi "Result Must Success Or Max Retry is Reach" saat klik next pada pengisian Task MSS',
+          Solusi:
+            "1. Submit ulang field dimana pesan error tsb muncul\n2. Lakukan sampai muncul Notifikasi 'Max Retry Has Been Reach\"\n3. Klik next ke field penginputan selanjutnya",
+        },
+        {
+          No: 68,
+          Sistem: "MSS",
+          Feature: "Input Pengajuan",
+          Kendala: "Muncul Notifikasi, Not All Task Detail Have Been Download",
+          Solusi:
+            "Klik Back\/tutup kemudian kembali ke menu tasklist dan pastikan indikator berupa titik pada kanan atas task yang akan dikerjakan sudah berwarna hijau",
+        },
+        {
+          No: 69,
+          Sistem: "MSS",
+          Feature: "Task Completed Barang",
+          Kendala:
+            "Ketentuan Pengisian Field Foto CMO bersama Unit dan Konsumen produk NB dengan result Instat Approval (IA)",
+          Solusi:
+            "Pengajuan Produk Reguler dengan result IA, Field Foto CMO bersama Unit dan Konsumen pada task completed diisi dengan Foto Pricelist",
+        },
+        {
+          No: 70,
+          Sistem: "MSS",
+          Feature: "Input Pengajuan",
+          Kendala: "Input Ulang pengajuan",
+          Solusi:
+            'Jika atas kondisi tertentu diperlukan Input Ulang pengajuan, maka pastikan pengajuan sebelumnya sudah memiliki Final Result yaitu dengan memilih Is Cancel App "YES" pada MSS dan Jangan dilakukan delete task melalui menu delete task Web MSS',
+        },
+        {
+          No: 71,
+          Sistem: "MSS",
+          Feature: "Input Pengajuan",
+          Kendala: "Field mental pada saat dilakukan pemilihan inputan",
+          Solusi:
+            "Jika terjadi kondisi field mental (langsung otomatis kembali ke field awal) pada saat dilakukan pemilihan inputan, lakukan cara sbb :\n1. Batalkan pengerjaan\/penginputan pada Task yang sedang dikerjakan\n2. Mulai dari awal pengerjaan\/penginputan Task\n3. Lakukan penginputan sampai dengan data diri Pemohon\n4. Save task\n5. Buka Task yang telah di save, dan lanjutkan pengerjaan sampai dengan submit",
+        },
+        {
+          No: 72,
+          Sistem: "POLO",
+          Feature: "Submit Aplikasi Pengajuan",
+          Kendala:
+            "Aplikasi berhenti di task cae setelah dilakukan submit penanganan (KI, CRM, MSS, dan WISe)",
+          Solusi:
+            "1. Lakukan pengecekan detail aplikasi di menu application inquiry dari masing-masing sistem (step penanganan terakhir)\n2. Lakukan pengecekan\/validasi data di POLO untuk mengetahui detail aplikasi pengajuan. Adapun penanganan selanjutnya mengikuti result validasi berikut :\n- jika Nomer Hp di isi 0 maka ajukan tiket ISR",
+        },
+        {
+          No: 73,
+          Sistem: "POLO",
+          Feature: "ODR Tidak Turun",
+          Kendala: "Setelah submit aplikasi tidak turun ODR NO",
+          Solusi:
+            "Lakukan pengecekan\/validasi data di POLO by no pengajuan Kawan Internal\/nama customer untuk mengetahui detail aplikasi pengajuan. Adapun penanganan selanjutnya mengikuti result validasi berikut :\n- jika result validasi tidak terdapat fatal score, maka PIC cabang melakukan koordinasi dengan tim HO\n- jika result validasi terdapat fatal score, maka proses input ulang aplikasi mengikuti kategori fatal score",
+        },
+        {
+          No: 74,
+          Sistem: "POLO",
+          Feature: "POLO Step Kosong",
+          Kendala: "Aplikasi stuck karena POLO Step Kosong\/tidak update",
+          Solusi:
+            "1. Pastikan pemilihan POT sudah benar\n2. Pastikan hasil validasi data diri tidak terdapat fatal score\n3. Jika sudah dipastikan kedua langkah diatas bukan menjadi penyebab POLO step kosong, maka ajukan tiket ISR\n4. Lakukan input ulang jika terdapat kesalahan pemilihan POT atau terdapat fatal score pada validasi data diri",
+        },
+        {
+          No: 75,
+          Sistem: "POLO",
+          Feature: "Aplikasi BCP",
+          Kendala: "App BCP Tidak tampil di POLO",
+          Solusi:
+            "1. Lakukan pengecekan data alamat residence, legal dan job customer\/spouse\/guarantor di WISe harus sesuai \/ terupdate (proses update mengikuti ketentuan yang berlaku)\n2. Jika keseluruhan alamat sudah terupdate namun masih tidak tampil di POLO, maka PIC cabang perlu mengajukan tiket ISR",
+        },
+        {
+          No: 11,
+          Sistem: "WISE",
+          Feature: "Cancel Wise",
+          Kendala:
+            "Aplikasi yang telah di Cancel Wise (final) tidak dapat langsung diinput ulang dikarenakan masih dalam SLA\n\nNotes : SLA 300 hari",
+          Solusi: "Pengajuan Void SLA atas agreement yang dicancel",
+        },
+        {
+          No: 12,
+          Sistem: "WISE",
+          Feature: "Auto Cancel IA",
+          Kendala:
+            "Aplikasi dengan result IA terkena Auto Cancel IA di WISe dikarenakan Perbedaan data inputan Entry Point, MSS dan WISe",
+          Solusi:
+            "Proses dapat dilanjutkan dengan melengkapi Task Survey (Task Foto dan Task Text) yang turun ke PIC awal yang melakukan survey",
+        },
+        {
+          No: 76,
+          Sistem: "WISe",
+          Feature: "E-Sign",
+          Kendala: "Wise Error E-Sign",
+          Solusi:
+            "1. Dilakukan pembuatan BA cancel E-sign terlebih dahulu\n2. Koordinasi ke tim operation cabang untuk melakukan cancel E-sign",
+        },
+        {
+          No: 77,
+          Sistem: "WISe",
+          Feature: "Submit NAP",
+          Kendala:
+            'Submit NAP Error, tampil warning " Object Reference not set to an instance of an object"',
+          Solusi:
+            "1. Lakukan pengecekan data alamat residence, legal dan job customer\/spouse\/guarantor di WISe harus sesuai \/ terupdate (proses update mengikuti ketentuan yang berlaku)\n2. Lakukan submit ulang NAP",
+        },
+        {
+          No: 78,
+          Sistem: "WISe",
+          Feature: "Auto Pengecekan History Credit",
+          Kendala:
+            "Auto Pengecekan History Credit - Tidak tampil\/ Tidak Sesuai",
+          Solusi:
+            'Terdapat dua opsi penanganan issue :\n1. Lakukan pengecekan Pengecekan History Credit secara manual di portal OJK, apabila ditemukan PIC terkait perlu mengupdate pada result Pengecekan History Credit manual di WISe\n2. Lakukan input nilai angsuran pembiayaan yang diajukan ke field "Other installment" di Menu Customer - Financial Data',
+        },
+        {
+          No: 79,
+          Sistem: "WISE",
+          Feature: "Step OTH\/TC",
+          Kendala: "aplikasi stuck oth\/tc check_app_apv_type_act",
+          Solusi:
+            "1. Koordinasikan kepada tim HO \n2. Cek berkala pada menu inquiry di WISe\n3. Lakukan submit ulang proses di WISe",
+        },
+        {
+          No: 80,
+          Sistem: "WISE",
+          Feature: "Aplikasi WSC",
+          Kendala:
+            "CAAMTRK30NEWC is not allowed. Your Approval Value Must be Smaller than max approval scheme limit",
+          Solusi:
+            "1. Cek application Exposure pada menu tab financial data\n2. Apabila exposure >35 juta, maka perlu dilakukan penyesuaian plafond mengikuti scheme approval CAC (Maksimum 35 juta)",
+        },
+        {
+          No: 81,
+          Sistem: "WISE",
+          Feature: "Action Phonever\/Credit Review",
+          Kendala: "A Problem Occured In This Page",
+          Solusi:
+            "Berikut solusi yang harus dilakukan secara berurutan sampai dengan solve :\n1. Pastikan koneksi PC atau laptop dalam kondisi baik \n2. Logout dan login ulang WISe\n3. Restart browser\n4. Apabila issue masih terjadi, mohon untuk melakukan pengajuan tiket ISR",
+        },
+        {
+          No: 82,
+          Sistem: "WISE",
+          Feature: "Submit NAP",
+          Kendala:
+            "Response Code : 400 Message : Have Trouble when call third party service",
+          Solusi:
+            "1. Lakukan pengecekan POT yang digunakan \n2. Apabila POT yang digunakan merupakan POT inactive, mohon melakukan input ulang menggunakan POT lain atau menghubungi function marketing HO",
+        },
+        {
+          No: 83,
+          Sistem: "WISE",
+          Feature: "Submit NAP",
+          Kendala: "Response Code : 16 Message : PROVINCE_NOT_FOUND",
+          Solusi:
+            "1. Lakukan pengecekan data alamat residence, legal dan job customer\/spouse\/guarantor di WISe harus sesuai \/ terupdate (proses update mengikuti ketentuan yang berlaku)\n2. Lakukan submit ulang NAP",
+        },
+        {
+          No: 84,
+          Sistem: "WISE",
+          Feature: "Task OTS FV",
+          Kendala: "Tidak bisa approval on wom ada keterangan error 2009",
+          Solusi: "Notes request ots cac di wise maksimal 100 karakter",
+        },
+      ];
+
+      const sistemSelect = document.getElementById("sistem");
+      const featureSelect = document.getElementById("feature");
+      const kendalaSelect = document.getElementById("kendala");
+      const solusiTextarea = document.getElementById("solusi");
+
+      // Populate Sistem options
+      const sistemOptions = [...new Set(data.map((item) => item.Sistem))];
+      sistemOptions.forEach((sistem) => {
+        const option = document.createElement("option");
+        option.value = sistem;
+        option.textContent = sistem;
+        sistemSelect.appendChild(option);
+      });
+
+      // Populate Feature options based on Sistem
+      sistemSelect.addEventListener("change", () => {
+        featureSelect.innerHTML =
+          '<option value="">-- Pilih Feature --</option>';
+        kendalaSelect.innerHTML =
+          '<option value="">-- Pilih Kendala --</option>';
+        solusiTextarea.value = "";
+        featureSelect.disabled = !sistemSelect.value;
+        kendalaSelect.disabled = true;
+
+        if (sistemSelect.value) {
+          const features = [
+            ...new Set(
+              data
+                .filter((item) => item.Sistem === sistemSelect.value)
+                .map((item) => item.Feature)
+            ),
+          ];
+          features.forEach((feature) => {
+            const option = document.createElement("option");
+            option.value = feature;
+            option.textContent = feature;
+            featureSelect.appendChild(option);
+          });
+        }
+      });
+
+      // Populate Kendala options based on Feature
+      featureSelect.addEventListener("change", () => {
+        kendalaSelect.innerHTML =
+          '<option value="">-- Pilih Kendala --</option>';
+        solusiTextarea.value = "";
+        kendalaSelect.disabled = !featureSelect.value;
+
+        if (featureSelect.value) {
+          const kendalas = data
+            .filter(
+              (item) =>
+                item.Feature === featureSelect.value &&
+                item.Sistem === sistemSelect.value
+            )
+            .map((item) => item.Kendala);
+          kendalas.forEach((kendala) => {
+            const option = document.createElement("option");
+            option.value = kendala;
+            option.textContent = kendala;
+            kendalaSelect.appendChild(option);
+          });
+        }
+      });
+
+      // Show Solusi based on Kendala
+      kendalaSelect.addEventListener("change", () => {
+        const solusi = data.find(
+          (item) =>
+            item.Sistem === sistemSelect.value &&
+            item.Feature === featureSelect.value &&
+            item.Kendala === kendalaSelect.value
+        )?.Solusi;
+        solusiTextarea.value = solusi || "";
+      });
+    </script>
+  </body>
+</html>
