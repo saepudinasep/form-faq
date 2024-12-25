@@ -1,33 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FAQ Selector</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WOM Finance - FAQ</title>
+    <link
+      rel="icon"
+      href="node_modules/bootstrap/dist/img/wom-finance.jpg"
+      type="image/png"
+    />
+    <link
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <h1>FAQ Selector</h1>
-    <label for="sistem">Sistem:</label>
-    <select id="sistem">
-      <option value="">-- Pilih Sistem --</option>
-    </select>
-    <br /><br />
-
-    <label for="feature">Feature:</label>
-    <select id="feature" disabled>
-      <option value="">-- Pilih Feature --</option>
-    </select>
-    <br /><br />
-
-    <label for="kendala">Kendala:</label>
-    <select id="kendala" disabled>
-      <option value="">-- Pilih Kendala --</option>
-    </select>
-    <br /><br />
-
-    <label for="solusi">Solusi:</label>
-    <textarea id="solusi" rows="5" cols="50" readonly></textarea>
-
+  <body class="bg-light">
+    <div class="container py-5">
+      <h1 class="mb-4 text-center">WOM Finance - FAQ</h1>
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Pilih FAQ</h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <label for="sistem" class="form-label">Sistem</label>
+              <select id="sistem" class="form-select">
+                <option value="">-- Pilih Sistem --</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="feature" class="form-label">Feature</label>
+              <select id="feature" class="form-select" disabled>
+                <option value="">-- Pilih Feature --</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="kendala" class="form-label">Kendala</label>
+              <select id="kendala" class="form-select" disabled>
+                <option value="">-- Pilih Kendala --</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="solusi" class="form-label">Solusi</label>
+              <textarea
+                id="solusi"
+                class="form-control"
+                rows="5"
+                readonly
+              ></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       const sistemSelect = document.getElementById("sistem");
       const featureSelect = document.getElementById("feature");
