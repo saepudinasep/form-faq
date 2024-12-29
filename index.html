@@ -174,21 +174,34 @@
               </div>
             </form>
             <div class="mt-4">
-              <table class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th>Sistem</th>
-                    <th>Feature</th>
-                    <th>Kendala</th>
-                    <th>Solusi</th>
-                  </tr>
-                </thead>
-                <tbody id="searchResults">
-                  <tr>
-                    <td colspan="4" class="text-center">Tidak ada hasil.</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th class="small">Sistem</th>
+                      <th class="small">Feature</th>
+                      <th class="small">Kendala</th>
+                      <th class="small">Solusi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="searchResults">
+                    <tr>
+                      <td colspan="4" class="text-center small">
+                        Tidak ada hasil.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Pagination Controls -->
+              <nav aria-label="Table Pagination">
+                <ul
+                  class="pagination justify-content-center"
+                  id="paginationControls"
+                >
+                  <!-- Pagination buttons will be added dynamically -->
+                </ul>
+              </nav>
             </div>
           </div>
         </div>
@@ -203,6 +216,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
     <script>
       let faqData = [];
+      let currentPage = 1;
+      const rowsPerPage = 5; // Number of rows per page
+
       const sistemSelect = document.getElementById("sistem");
       const featureSelect = document.getElementById("feature");
       const kendalaSelect = document.getElementById("kendala");
@@ -311,6 +327,89 @@
         });
       });
 
+      // Function to display paginated results
+      function displayPaginatedResults(results, page) {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedResults = results.slice(start, end);
+
+        searchResults.innerHTML = "";
+        if (paginatedResults.length === 0) {
+          searchResults.innerHTML =
+            '<tr><td colspan="4" class="text-center small">Tidak ada hasil.</td></tr>';
+          return;
+        }
+
+        paginatedResults.forEach((item) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+      <td class="text-wrap small">${item.Sistem}</td>
+      <td class="text-wrap small">${item.Feature}</td>
+      <td class="text-wrap small">${item.Kendala}</td>
+      <td class="text-wrap small">${item.Solusi}</td>
+    `;
+          searchResults.appendChild(row);
+        });
+      }
+
+      // Function to render pagination controls
+      function renderPaginationControls(results) {
+        const totalPages = Math.ceil(results.length / rowsPerPage);
+        const paginationControls =
+          document.getElementById("paginationControls");
+
+        paginationControls.innerHTML = "";
+
+        // Previous Button
+        const prevButton = document.createElement("li");
+        prevButton.className = `page-item ${
+          currentPage === 1 ? "disabled" : ""
+        }`;
+        prevButton.innerHTML = `<a class="page-link" href="#" aria-label="Previous">&laquo;</a>`;
+        prevButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (currentPage > 1) {
+            currentPage--;
+            updatePagination(results);
+          }
+        });
+        paginationControls.appendChild(prevButton);
+
+        // Page Numbers
+        for (let i = 1; i <= totalPages; i++) {
+          const pageItem = document.createElement("li");
+          pageItem.className = `page-item ${i === currentPage ? "active" : ""}`;
+          pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+          pageItem.addEventListener("click", (e) => {
+            e.preventDefault();
+            currentPage = i;
+            updatePagination(results);
+          });
+          paginationControls.appendChild(pageItem);
+        }
+
+        // Next Button
+        const nextButton = document.createElement("li");
+        nextButton.className = `page-item ${
+          currentPage === totalPages ? "disabled" : ""
+        }`;
+        nextButton.innerHTML = `<a class="page-link" href="#" aria-label="Next">&raquo;</a>`;
+        nextButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (currentPage < totalPages) {
+            currentPage++;
+            updatePagination(results);
+          }
+        });
+        paginationControls.appendChild(nextButton);
+      }
+
+      // Function to update table and pagination controls
+      function updatePagination(results) {
+        displayPaginatedResults(results, currentPage);
+        renderPaginationControls(results);
+      }
+
       // Handle Search
       document.getElementById("searchBtn").addEventListener("click", () => {
         const searchSistem = document
@@ -357,41 +456,28 @@
           );
         });
 
-        displaySearchResults(results);
+        currentPage = 1; // Reset to first page for new search
+        updatePagination(results);
       });
-
-      // Display search results in table
-      function displaySearchResults(results) {
-        searchResults.innerHTML = "";
-        if (results.length === 0) {
-          searchResults.innerHTML =
-            '<tr><td colspan="4" class="text-center">Tidak ada hasil.</td></tr>';
-          return;
-        }
-        results.forEach((item) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-      <td>${item.Sistem}</td>
-      <td>${item.Feature}</td>
-      <td>${item.Kendala}</td>
-      <td>${item.Solusi}</td>
-    `;
-          searchResults.appendChild(row);
-        });
-      }
 
       // Handle Clear Button
       document.getElementById("clearBtn").addEventListener("click", () => {
-        // Clear all input fields
         document.getElementById("searchSistem").value = "";
         document.getElementById("searchFeature").value = "";
         document.getElementById("searchKendala").value = "";
         // document.getElementById("searchSolusi").value = "";
 
-        // Reset search results table
         searchResults.innerHTML =
-          '<tr><td colspan="4" class="text-center">Tidak ada hasil.</td></tr>';
+          '<tr><td colspan="4" class="text-center small">Tidak ada hasil.</td></tr>';
+
+        const paginationControls =
+          document.getElementById("paginationControls");
+        paginationControls.innerHTML = "";
       });
+
+      // merubah tampilan table agar responsive
+      // menambahkan fitur pagination
+      // menambahkan fitur loading ketika fitur search dan fitur clear dijalankan
     </script>
   </body>
 </html>
