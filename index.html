@@ -13,6 +13,11 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <!-- SweetAlert CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body class="bg-light">
     <div class="container py-5">
@@ -22,6 +27,17 @@
           <h5 class="mb-0">Pilih FAQ</h5>
         </div>
         <div class="card-body">
+          <!-- Button to trigger search modal -->
+          <div class="mb-3 text-end">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-toggle="modal"
+              data-bs-target="#searchModal"
+            >
+              Cari FAQ
+            </button>
+          </div>
           <form>
             <div class="mb-3">
               <label for="sistem" class="form-label">Sistem</label>
@@ -84,12 +100,109 @@
         </div>
       </div>
     </div>
+
+    <!-- Search Modal -->
+    <div
+      class="modal fade"
+      id="searchModal"
+      tabindex="-1"
+      aria-labelledby="searchModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="searchModalLabel">Cari FAQ</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="searchForm">
+              <div class="row g-3">
+                <div class="col-md-3">
+                  <label for="searchSistem" class="form-label">Sistem</label>
+                  <input
+                    type="text"
+                    id="searchSistem"
+                    class="form-control"
+                    placeholder="Cari Sistem"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label for="searchFeature" class="form-label">Feature</label>
+                  <input
+                    type="text"
+                    id="searchFeature"
+                    class="form-control"
+                    placeholder="Cari Feature"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label for="searchKendala" class="form-label">Kendala</label>
+                  <input
+                    type="text"
+                    id="searchKendala"
+                    class="form-control"
+                    placeholder="Cari Kendala"
+                  />
+                </div>
+                <!-- <div class="col-md-3">
+                  <label for="searchSolusi" class="form-label">Solusi</label>
+                  <input
+                    type="text"
+                    id="searchSolusi"
+                    class="form-control"
+                    placeholder="Cari Solusi"
+                  />
+                </div> -->
+              </div>
+              <div class="mt-3 text-end">
+                <button
+                  type="button"
+                  id="clearBtn"
+                  class="btn btn-secondary me-2"
+                >
+                  Clear
+                </button>
+                <button type="button" id="searchBtn" class="btn btn-primary">
+                  Cari
+                </button>
+              </div>
+            </form>
+            <div class="mt-4">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Sistem</th>
+                    <th>Feature</th>
+                    <th>Kendala</th>
+                    <th>Solusi</th>
+                  </tr>
+                </thead>
+                <tbody id="searchResults">
+                  <tr>
+                    <td colspan="4" class="text-center">Tidak ada hasil.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
     <script>
+      let faqData = [];
       const sistemSelect = document.getElementById("sistem");
       const featureSelect = document.getElementById("feature");
       const kendalaSelect = document.getElementById("kendala");
@@ -97,102 +210,187 @@
       const doneBtn = document.getElementById("doneBtn");
       const notDoneBtn = document.getElementById("notDoneBtn");
       const googleFormLink = document.getElementById("googleFormLink");
+      const searchResults = document.getElementById("searchResults");
 
-      // Load JSON data from external file
-      fetch("output.json") // Replace with the correct path to your JSON file
+      // Load JSON and initialize dropdowns
+      fetch("output.json")
         .then((response) => response.json())
         .then((data) => {
-          // Populate Sistem options
-          const sistemOptions = [...new Set(data.map((item) => item.Sistem))];
-          sistemOptions.forEach((sistem) => {
-            const option = document.createElement("option");
-            option.value = sistem;
-            option.textContent = sistem;
-            sistemSelect.appendChild(option);
-          });
-
-          // Populate Feature options based on Sistem
-          sistemSelect.addEventListener("change", () => {
-            featureSelect.innerHTML =
-              '<option value="">-- Pilih Feature --</option>';
-            kendalaSelect.innerHTML =
-              '<option value="">-- Pilih Kendala --</option>';
-            solusiTextarea.value = "";
-            googleFormLink.classList.add("d-none");
-            doneBtn.disabled = true;
-            notDoneBtn.disabled = true;
-            featureSelect.disabled = !sistemSelect.value;
-            kendalaSelect.disabled = true;
-
-            if (sistemSelect.value) {
-              const features = [
-                ...new Set(
-                  data
-                    .filter((item) => item.Sistem === sistemSelect.value)
-                    .map((item) => item.Feature)
-                ),
-              ];
-              features.forEach((feature) => {
-                const option = document.createElement("option");
-                option.value = feature;
-                option.textContent = feature;
-                featureSelect.appendChild(option);
-              });
-            }
-          });
-
-          // Populate Kendala options based on Feature
-          featureSelect.addEventListener("change", () => {
-            kendalaSelect.innerHTML =
-              '<option value="">-- Pilih Kendala --</option>';
-            solusiTextarea.value = "";
-            googleFormLink.classList.add("d-none");
-            doneBtn.disabled = true;
-            notDoneBtn.disabled = true;
-            kendalaSelect.disabled = !featureSelect.value;
-
-            if (featureSelect.value) {
-              const kendalas = data
-                .filter(
-                  (item) =>
-                    item.Feature === featureSelect.value &&
-                    item.Sistem === sistemSelect.value
-                )
-                .map((item) => item.Kendala);
-              kendalas.forEach((kendala) => {
-                const option = document.createElement("option");
-                option.value = kendala;
-                option.textContent = kendala;
-                kendalaSelect.appendChild(option);
-              });
-            }
-          });
-
-          // Show Solusi based on Kendala
-          kendalaSelect.addEventListener("change", () => {
-            const solusi = data.find(
-              (item) =>
-                item.Sistem === sistemSelect.value &&
-                item.Feature === featureSelect.value &&
-                item.Kendala === kendalaSelect.value
-            )?.Solusi;
-            solusiTextarea.value = solusi || "";
-            googleFormLink.classList.add("d-none");
-            doneBtn.disabled = !solusi; // Enable buttons if solusi is filled
-            notDoneBtn.disabled = !solusi;
-          });
+          faqData = data;
+          initializeDropdowns();
         })
         .catch((error) => console.error("Error loading JSON data:", error));
 
-      // Handle Done button
+      // Initialize Dropdowns
+      function initializeDropdowns() {
+        populateDropdown(sistemSelect, getUniqueValues("Sistem"));
+        sistemSelect.addEventListener("change", handleSistemChange);
+        featureSelect.addEventListener("change", handleFeatureChange);
+        kendalaSelect.addEventListener("change", handleKendalaChange);
+      }
+
+      // Populate dropdown with unique values
+      function populateDropdown(selectElement, values) {
+        selectElement.innerHTML = '<option value="">-- Pilih --</option>';
+        values.forEach((value) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          selectElement.appendChild(option);
+        });
+      }
+
+      // Get unique values for a column
+      function getUniqueValues(column) {
+        return [...new Set(faqData.map((item) => item[column]))];
+      }
+
+      // Handle Sistem Change
+      function handleSistemChange() {
+        featureSelect.disabled = !sistemSelect.value;
+        kendalaSelect.disabled = true;
+        solusiTextarea.value = "";
+        doneBtn.disabled = true;
+        notDoneBtn.disabled = true;
+        if (sistemSelect.value) {
+          const filteredFeatures = faqData
+            .filter((item) => item.Sistem === sistemSelect.value)
+            .map((item) => item.Feature);
+          populateDropdown(featureSelect, filteredFeatures);
+        }
+      }
+
+      // Handle Feature Change
+      function handleFeatureChange() {
+        kendalaSelect.disabled = !featureSelect.value;
+        solusiTextarea.value = "";
+        doneBtn.disabled = true;
+        notDoneBtn.disabled = true;
+        if (featureSelect.value) {
+          const filteredKendala = faqData
+            .filter(
+              (item) =>
+                item.Sistem === sistemSelect.value &&
+                item.Feature === featureSelect.value
+            )
+            .map((item) => item.Kendala);
+          populateDropdown(kendalaSelect, filteredKendala);
+        }
+      }
+
+      // Handle Kendala Change
+      function handleKendalaChange() {
+        const solusi = faqData.find(
+          (item) =>
+            item.Sistem === sistemSelect.value &&
+            item.Feature === featureSelect.value &&
+            item.Kendala === kendalaSelect.value
+        )?.Solusi;
+        solusiTextarea.value = solusi || "";
+        doneBtn.disabled = !solusi;
+        notDoneBtn.disabled = !solusi;
+      }
+
+      // Handle Done Button
       doneBtn.addEventListener("click", () => {
         googleFormLink.classList.add("d-none");
-        alert("Solusi berhasil diselesaikan!");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil",
+          text: "Solusi berhasil diselesaikan!",
+        });
       });
 
-      // Handle Not Done button
+      // Handle Not Done Button
       notDoneBtn.addEventListener("click", () => {
         googleFormLink.classList.remove("d-none");
+        Swal.fire({
+          icon: "info",
+          title: "Belum Selesai",
+          text: "Silakan isi Google Form untuk melaporkan kendala Anda.",
+        });
+      });
+
+      // Handle Search
+      document.getElementById("searchBtn").addEventListener("click", () => {
+        const searchSistem = document
+          .getElementById("searchSistem")
+          .value.trim();
+        const searchFeature = document
+          .getElementById("searchFeature")
+          .value.trim();
+        const searchKendala = document
+          .getElementById("searchKendala")
+          .value.trim();
+        // const searchSolusi = document
+        //   .getElementById("searchSolusi")
+        //   .value.trim();
+
+        if (
+          !searchSistem &&
+          !searchFeature &&
+          !searchKendala
+          //  &&
+          // !searchSolusi
+        ) {
+          Swal.fire({
+            icon: "warning",
+            title: "Peringatan",
+            text: "Harap isi minimal satu kolom pencarian!",
+          });
+          return;
+        }
+
+        const results = faqData.filter((item) => {
+          return (
+            (searchSistem === "" ||
+              item.Sistem.toLowerCase().includes(searchSistem.toLowerCase())) &&
+            (searchFeature === "" ||
+              item.Feature.toLowerCase().includes(
+                searchFeature.toLowerCase()
+              )) &&
+            (searchKendala === "" ||
+              item.Kendala.toLowerCase().includes(searchKendala.toLowerCase()))
+            //    &&
+            // (searchSolusi === "" ||
+            //   item.Solusi.toLowerCase().includes(searchSolusi.toLowerCase()))
+          );
+        });
+
+        displaySearchResults(results);
+      });
+
+      // Display search results in table
+      function displaySearchResults(results) {
+        searchResults.innerHTML = "";
+        if (results.length === 0) {
+          searchResults.innerHTML =
+            '<tr><td colspan="4" class="text-center">Tidak ada hasil.</td></tr>';
+          return;
+        }
+        results.forEach((item) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+      <td>${item.Sistem}</td>
+      <td>${item.Feature}</td>
+      <td>${item.Kendala}</td>
+      <td>${item.Solusi}</td>
+    `;
+          searchResults.appendChild(row);
+        });
+      }
+
+      // Handle Clear Button
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        // Clear all input fields
+        document.getElementById("searchSistem").value = "";
+        document.getElementById("searchFeature").value = "";
+        document.getElementById("searchKendala").value = "";
+        // document.getElementById("searchSolusi").value = "";
+
+        // Reset search results table
+        searchResults.innerHTML =
+          '<tr><td colspan="4" class="text-center">Tidak ada hasil.</td></tr>';
       });
     </script>
   </body>
