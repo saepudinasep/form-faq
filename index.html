@@ -24,7 +24,7 @@
       <h1 class="mb-4 text-center">WOM Finance - FAQ</h1>
       <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">Pilih FAQ</h5>
+          <h5 class="mb-0 small">Pilih FAQ</h5>
         </div>
         <div class="card-body">
           <!-- Button to trigger search modal -->
@@ -40,25 +40,41 @@
           </div>
           <form>
             <div class="mb-3">
-              <label for="sistem" class="form-label">Sistem</label>
-              <select id="sistem" class="form-select">
+              <label for="sistem" class="form-label small text-muted"
+                >Sistem</label
+              >
+              <select id="sistem" class="form-select form-select-sm small">
                 <option value="">-- Pilih Sistem --</option>
               </select>
             </div>
             <div class="mb-3">
-              <label for="feature" class="form-label">Feature</label>
-              <select id="feature" class="form-select" disabled>
+              <label for="feature" class="form-label small text-muted"
+                >Feature</label
+              >
+              <select
+                id="feature"
+                class="form-select form-select-sm small"
+                disabled
+              >
                 <option value="">-- Pilih Feature --</option>
               </select>
             </div>
             <div class="mb-3">
-              <label for="kendala" class="form-label">Kendala</label>
-              <select id="kendala" class="form-select" disabled>
+              <label for="kendala" class="form-label small text-muted"
+                >Kendala</label
+              >
+              <select
+                id="kendala"
+                class="form-select form-select-sm small"
+                disabled
+              >
                 <option value="">-- Pilih Kendala --</option>
               </select>
             </div>
             <div class="mb-3">
-              <label for="solusi" class="form-label">Solusi</label>
+              <label for="solusi" class="form-label small text-muted"
+                >Solusi</label
+              >
               <textarea
                 id="solusi"
                 class="form-control"
@@ -67,7 +83,9 @@
               ></textarea>
             </div>
             <div class="mb-3">
-              <label class="form-label">Apakah solusi sudah berhasil?</label>
+              <label class="form-label small text-muted"
+                >Apakah solusi sudah berhasil?</label
+              >
               <div>
                 <button
                   type="button"
@@ -174,25 +192,26 @@
               </div>
             </form>
             <div class="mt-4">
+              <!-- Table -->
               <div class="table-responsive">
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped table-hover">
                   <thead>
                     <tr>
-                      <th class="small">Sistem</th>
-                      <th class="small">Feature</th>
-                      <th class="small">Kendala</th>
-                      <th class="small">Solusi</th>
+                      <th class="small text-muted">Sistem</th>
+                      <th class="small text-muted">Feature</th>
+                      <th class="small text-muted">Kendala</th>
                     </tr>
                   </thead>
                   <tbody id="searchResults">
                     <tr>
-                      <td colspan="4" class="text-center small">
+                      <td colspan="3" class="text-center small text-muted">
                         Tidak ada hasil.
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+
               <!-- Pagination Controls -->
               <nav aria-label="Table Pagination">
                 <ul
@@ -203,6 +222,41 @@
                 </ul>
               </nav>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal untuk menampilkan Solusi -->
+    <div
+      class="modal fade"
+      id="solutionModal"
+      tabindex="-1"
+      aria-labelledby="solutionModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="solutionModalLabel">Solusi</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="solutionContent">
+            <!-- Solusi akan dimasukkan di sini -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
@@ -227,6 +281,7 @@
       const notDoneBtn = document.getElementById("notDoneBtn");
       const googleFormLink = document.getElementById("googleFormLink");
       const searchResults = document.getElementById("searchResults");
+      const paginationControls = document.getElementById("paginationControls");
 
       // Load JSON and initialize dropdowns
       fetch("output.json")
@@ -247,11 +302,13 @@
 
       // Populate dropdown with unique values
       function populateDropdown(selectElement, values) {
-        selectElement.innerHTML = '<option value="">-- Pilih --</option>';
+        selectElement.innerHTML =
+          '<option value="" class="small text-muted">-- Pilih --</option>';
         values.forEach((value) => {
           const option = document.createElement("option");
           option.value = value;
           option.textContent = value;
+          option.classList.add("small", "text-muted"); // Menambahkan kelas teks kecil
           selectElement.appendChild(option);
         });
       }
@@ -336,18 +393,26 @@
         searchResults.innerHTML = "";
         if (paginatedResults.length === 0) {
           searchResults.innerHTML =
-            '<tr><td colspan="4" class="text-center small">Tidak ada hasil.</td></tr>';
+            '<tr><td colspan="3" class="text-center small">Tidak ada hasil.</td></tr>';
           return;
         }
 
         paginatedResults.forEach((item) => {
           const row = document.createElement("tr");
+
           row.innerHTML = `
-      <td class="text-wrap small">${item.Sistem}</td>
-      <td class="text-wrap small">${item.Feature}</td>
-      <td class="text-wrap small">${item.Kendala}</td>
-      <td class="text-wrap small">${item.Solusi}</td>
+      <td class="text-wrap small text-muted" style="max-width: 150px; cursor: pointer;" data-column="Sistem">${item.Sistem}</td>
+      <td class="text-wrap small text-muted" style="max-width: 150px; cursor: pointer;" data-column="Feature">${item.Feature}</td>
+      <td class="text-wrap small text-muted" style="max-width: 150px; cursor: pointer;" data-column="Kendala">${item.Kendala}</td>
     `;
+
+          // Add click event for modal
+          row.querySelectorAll("td").forEach((cell) => {
+            cell.addEventListener("click", () =>
+              showSolutionModal(item.Solusi)
+            );
+          });
+
           searchResults.appendChild(row);
         });
       }
@@ -355,9 +420,6 @@
       // Function to render pagination controls
       function renderPaginationControls(results) {
         const totalPages = Math.ceil(results.length / rowsPerPage);
-        const paginationControls =
-          document.getElementById("paginationControls");
-
         paginationControls.innerHTML = "";
 
         // Previous Button
@@ -410,7 +472,17 @@
         renderPaginationControls(results);
       }
 
-      // Handle Search
+      // Function to show the solution modal
+      function showSolutionModal(solution) {
+        const solutionModal = new bootstrap.Modal(
+          document.getElementById("solutionModal")
+        );
+        document.getElementById("solutionContent").textContent =
+          solution || "Solusi tidak tersedia.";
+        solutionModal.show();
+      }
+
+      // Handle Search Button
       document.getElementById("searchBtn").addEventListener("click", () => {
         const searchSistem = document
           .getElementById("searchSistem")
@@ -468,10 +540,8 @@
         // document.getElementById("searchSolusi").value = "";
 
         searchResults.innerHTML =
-          '<tr><td colspan="4" class="text-center small">Tidak ada hasil.</td></tr>';
+          '<tr><td colspan="3" class="text-center small">Tidak ada hasil.</td></tr>';
 
-        const paginationControls =
-          document.getElementById("paginationControls");
         paginationControls.innerHTML = "";
       });
 
