@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form FAQ - WOM Finance</title>
+    <link rel="icon" href="wom-finance.jpg" type="image/png" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <!-- SweetAlert CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-light">
+    <div class="container py-3">
+      <h1 class="mb-4 text-center">Form FAQ - WOM Finance</h1>
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0 small">Isi Form FAQ</h5>
+        </div>
+        <div class="card-body">
+          <form id="faqForm" method="POST">
+            <!-- Brand and Cabang -->
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <label for="brand" class="form-label small text-muted"
+                  >Brand</label
+                >
+                <select id="brand" class="form-select form-select-sm">
+                  <option value="">-- Pilih Brand --</option>
+                  <option value="nb">Reguler</option>
+                  <option value="mas">MasKu</option>
+                  <option value="mtr">MotorKu</option>
+                  <option value="mbl">MobilKu</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="cabang" class="form-label small text-muted"
+                  >Cabang</label
+                >
+                <input
+                  type="text"
+                  id="cabang"
+                  name="entry.27483305"
+                  class="form-control form-control-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Nama Cust and Cust ID -->
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <label for="NCust" class="form-label small text-muted"
+                  >Nama Cust</label
+                >
+                <input
+                  type="text"
+                  id="NCust"
+                  name="entry.349701399"
+                  class="form-control form-control-sm"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="IdCust" class="form-label small text-muted"
+                  >Cust ID</label
+                >
+                <input
+                  type="text"
+                  id="IdCust"
+                  name="entry.1285711467"
+                  class="form-control form-control-sm"
+                />
+              </div>
+            </div>
+
+            <!-- PIC Input and Source Data -->
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <label for="pic" class="form-label small text-muted"
+                  >PIC Input</label
+                >
+                <input
+                  type="text"
+                  id="pic"
+                  name="entry.1383050238"
+                  class="form-control form-control-sm"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="SData" class="form-label small text-muted"
+                  >Source Data</label
+                >
+                <input
+                  type="text"
+                  id="SData"
+                  name="entry.499341626"
+                  class="form-control form-control-sm"
+                />
+              </div>
+            </div>
+
+            <!-- No Kawan and Task ID Polo -->
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <label for="NoKwn" class="form-label small text-muted"
+                  >No Kawan Internal</label
+                >
+                <input
+                  type="text"
+                  id="NoKwn"
+                  name="entry.1372652565"
+                  class="form-control form-control-sm"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="IdPolo" class="form-label small text-muted"
+                  >Task ID Polo</label
+                >
+                <input
+                  type="text"
+                  id="IdPolo"
+                  name="entry.163739172"
+                  class="form-control form-control-sm"
+                />
+              </div>
+            </div>
+
+            <!-- No APP and No Odrn -->
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <label for="NoApp" class="form-label small text-muted"
+                  >No APP</label
+                >
+                <input
+                  type="text"
+                  id="NoApp"
+                  name="entry.66506618"
+                  class="form-control form-control-sm"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="NoOdrn" class="form-label small text-muted"
+                  >No Odrn</label
+                >
+                <input
+                  type="text"
+                  id="NoOdrn"
+                  name="entry.996527903"
+                  class="form-control form-control-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Issue -->
+            <div class="mb-2">
+              <label for="issue" class="form-label small text-muted"
+                >Issue</label
+              >
+              <textarea
+                id="issue"
+                name="entry.902491819"
+                class="form-control form-control-sm"
+                rows="5"
+              ></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="mb-2">
+              <button
+                type="submit"
+                id="submitButton"
+                class="btn btn-primary btn-sm"
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                onclick="window.location.reload()"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
+    <script>
+      document
+        .getElementById("faqForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const brand = document.getElementById("brand").value;
+          let formUrl;
+
+          // Tentukan URL form berdasarkan brand
+          switch (brand) {
+            case "mas":
+              formUrl =
+                "https://docs.google.com/forms/d/e/1FAIpQLSeICODvzS46C_yN3W7G2WPq9QnN5FAZcj_Cm1KiDu52akapuA/formResponse";
+              break;
+            case "nb":
+              formUrl =
+                "https://docs.google.com/forms/d/e/1FAIpQLSdAIIAXXpbDmdO8qtWnyAgutCopPTGDhL5-tprvCKts1yZG0w/formResponse";
+              break;
+            case "mbl":
+              formUrl =
+                "https://docs.google.com/forms/d/e/1FAIpQLSeUfH1Y4ct2KJXm6dVIvb8yO44qWGfJpVAP9M-TFSgrg2PDzQ/formResponse";
+              break;
+            case "mtr":
+              formUrl =
+                "https://docs.google.com/forms/d/e/1FAIpQLSdnVEYF8LUO_irXpkrQSBKWIG__fh3tw4ClkqtNwFfKB2SB2Q/formResponse";
+              break;
+            default:
+              Swal.fire("Error", "Pilih brand terlebih dahulu!", "error");
+              return;
+          }
+
+          // Menampilkan halaman "Menunggu"
+          Swal.fire({
+            title: "Menunggu...",
+            text: "Formulir sedang diproses.",
+            icon: "info",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+          });
+
+          // Konfirmasi pengiriman
+          const form = document.getElementById("faqForm");
+          form.action = formUrl;
+          form.method = "POST";
+          form.submit();
+
+          // Menunggu hingga pengiriman selesai
+          setTimeout(function () {
+            // Simulasi pengiriman sukses atau gagal
+            const success = true; // Setel ke false untuk gagal
+
+            if (success) {
+              Swal.fire("Berhasil!", "Formulir berhasil dikirim.", "success");
+            } else {
+              Swal.fire("Gagal!", "Pengiriman formulir gagal.", "error");
+            }
+          }, 2000); // Waktu tunggu untuk simulasi
+        });
+    </script>
+  </body>
+</html>

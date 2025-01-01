@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WOM Finance - FAQ</title>
+    <title>FAQ - WOM Finance</title>
     <!-- Favicon -->
     <link rel="icon" href="wom-finance.jpg" type="image/png" />
     <!-- Bootstrap CSS -->
@@ -20,8 +20,8 @@
     />
   </head>
   <body class="bg-light">
-    <div class="container py-5">
-      <h1 class="mb-4 text-center">WOM Finance - FAQ</h1>
+    <div class="container py-3">
+      <h1 class="mb-4 text-center">FAQ - WOM Finance</h1>
       <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
           <h5 class="mb-0 small">Pilih FAQ</h5>
@@ -77,7 +77,7 @@
               >
               <textarea
                 id="solusi"
-                class="form-control"
+                class="form-control form-control-sm small"
                 rows="5"
                 readonly
               ></textarea>
@@ -106,12 +106,9 @@
               </div>
             </div>
             <div id="googleFormLink" class="mt-3 d-none">
-              <p>Silakan isi Google Form untuk melaporkan kendala Anda:</p>
-              <a
-                href="https://forms.gle/example"
-                target="_blank"
-                class="btn btn-primary"
-                >Isi Google Form</a
+              <p>Silakan isi Form untuk melaporkan kendala Anda:</p>
+              <a href="form.html" target="_blank" class="btn btn-primary"
+                >Isi Form</a
               >
             </div>
           </form>
@@ -303,7 +300,7 @@
       // Populate dropdown with unique values
       function populateDropdown(selectElement, values) {
         selectElement.innerHTML =
-          '<option value="" class="small text-muted">-- Pilih --</option>';
+          '<option value="" class="small text-muted">-- Pilih Sistem --</option>';
         values.forEach((value) => {
           const option = document.createElement("option");
           option.value = value;
@@ -380,7 +377,7 @@
         Swal.fire({
           icon: "info",
           title: "Belum Selesai",
-          text: "Silakan isi Google Form untuk melaporkan kendala Anda.",
+          text: "Silakan isi Form untuk melaporkan kendala Anda.",
         });
       });
 
