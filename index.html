@@ -13,6 +13,11 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
     <!-- SweetAlert CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.min.css"
@@ -197,6 +202,7 @@
                       <th class="small text-muted">Sistem</th>
                       <th class="small text-muted">Feature</th>
                       <th class="small text-muted">Kendala</th>
+                      <th class="small text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody id="searchResults">
@@ -279,6 +285,22 @@
       const googleFormLink = document.getElementById("googleFormLink");
       const searchResults = document.getElementById("searchResults");
       const paginationControls = document.getElementById("paginationControls");
+
+      // Tampilkan indikator loading
+      function showLoading(message = "Loading...") {
+        Swal.fire({
+          title: message,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+      }
+
+      // Sembunyikan indikator loading
+      function hideLoading() {
+        Swal.close();
+      }
 
       // Load JSON and initialize dropdowns
       fetch("output.json")
@@ -390,7 +412,7 @@
         searchResults.innerHTML = "";
         if (paginatedResults.length === 0) {
           searchResults.innerHTML =
-            '<tr><td colspan="3" class="text-center small">Tidak ada hasil.</td></tr>';
+            '<tr><td colspan="4" class="text-center small">Tidak ada hasil.</td></tr>';
           return;
         }
 
@@ -398,17 +420,21 @@
           const row = document.createElement("tr");
 
           row.innerHTML = `
-      <td class="text-wrap small text-muted" style="max-width: 150px; cursor: pointer;" data-column="Sistem">${item.Sistem}</td>
-      <td class="text-wrap small text-muted" style="max-width: 150px; cursor: pointer;" data-column="Feature">${item.Feature}</td>
-      <td class="text-wrap small text-muted" style="max-width: 150px; cursor: pointer;" data-column="Kendala">${item.Kendala}</td>
+      <td class="text-wrap small text-muted" style="max-width: 150px;">${item.Sistem}</td>
+      <td class="text-wrap small text-muted" style="max-width: 150px;">${item.Feature}</td>
+      <td class="text-wrap small text-muted" style="max-width: 150px;">${item.Kendala}</td>
+      <td class="text-center">
+        <button class="btn btn-sm btn-success view-btn" title="View Solution">
+          <i class="bi bi-eye"></i> View
+        </button>
+      </td>
     `;
 
-          // Add click event for modal
-          row.querySelectorAll("td").forEach((cell) => {
-            cell.addEventListener("click", () =>
-              showSolutionModal(item.Solusi)
-            );
-          });
+          // Add click event for "View" button
+          const viewBtn = row.querySelector(".view-btn");
+          viewBtn.addEventListener("click", () =>
+            showSolutionModal(item.Solusi)
+          );
 
           searchResults.appendChild(row);
         });
@@ -481,6 +507,7 @@
 
       // Handle Search Button
       document.getElementById("searchBtn").addEventListener("click", () => {
+        showLoading("Mencari data...");
         const searchSistem = document
           .getElementById("searchSistem")
           .value.trim();
@@ -490,17 +517,9 @@
         const searchKendala = document
           .getElementById("searchKendala")
           .value.trim();
-        // const searchSolusi = document
-        //   .getElementById("searchSolusi")
-        //   .value.trim();
 
-        if (
-          !searchSistem &&
-          !searchFeature &&
-          !searchKendala
-          //  &&
-          // !searchSolusi
-        ) {
+        if (!searchSistem && !searchFeature && !searchKendala) {
+          hideLoading();
           Swal.fire({
             icon: "warning",
             title: "Peringatan",
@@ -519,13 +538,11 @@
               )) &&
             (searchKendala === "" ||
               item.Kendala.toLowerCase().includes(searchKendala.toLowerCase()))
-            //    &&
-            // (searchSolusi === "" ||
-            //   item.Solusi.toLowerCase().includes(searchSolusi.toLowerCase()))
           );
         });
 
-        currentPage = 1; // Reset to first page for new search
+        hideLoading();
+        currentPage = 1;
         updatePagination(results);
       });
 
