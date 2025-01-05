@@ -26,31 +26,55 @@
           <h5 class="mb-0 small">Isi Form FAQ</h5>
         </div>
         <div class="card-body">
-          <form id="faqForm" method="POST">
-            <!-- Brand and Cabang -->
+          <form id="faqForm" method="POST" novalidate>
+            <!-- Brand and Error Sistem -->
             <div class="row mb-2">
               <div class="col-md-6">
                 <label for="brand" class="form-label small text-muted"
                   >Brand</label
                 >
-                <select id="brand" class="form-select form-select-sm">
+                <select id="brand" class="form-select form-select-sm" required>
                   <option value="">-- Pilih Brand --</option>
                   <option value="nb">Reguler</option>
                   <option value="mas">MasKu</option>
                   <option value="mtr">MotorKu</option>
                   <option value="mbl">MobilKu</option>
                 </select>
+                <div class="invalid-feedback">Brand harus dipilih!</div>
+              </div>
+              <div class="col-md-6">
+                <label for="errorSystem" class="form-label small text-muted"
+                  >Error Sistem</label
+                >
+                <select id="errorSystem" class="form-select form-select-sm">
+                  <option value="">-- Pilih Error Sistem --</option>
+                  <option value="ki">KI</option>
+                  <option value="mss">MSS</option>
+                  <option value="wise">WISE</option>
+                  <option value="login">Login</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Region and Cabang -->
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <label for="region" class="form-label small text-muted"
+                  >Region</label
+                >
+                <select id="region" class="form-select form-select-sm">
+                  <option value="">-- Pilih Region --</option>
+                  <!-- Region options will be added dynamically -->
+                </select>
               </div>
               <div class="col-md-6">
                 <label for="cabang" class="form-label small text-muted"
                   >Cabang</label
                 >
-                <input
-                  type="text"
-                  id="cabang"
-                  name="entry.27483305"
-                  class="form-control form-control-sm"
-                />
+                <select id="cabang" class="form-select form-select-sm">
+                  <option value="">-- Pilih Cabang --</option>
+                  <!-- Cabang options will be added dynamically -->
+                </select>
               </div>
             </div>
 
@@ -80,7 +104,7 @@
               </div>
             </div>
 
-            <!-- PIC Input and Source Data -->
+            <!-- PIC Input and No Kawan -->
             <div class="row mb-2">
               <div class="col-md-6">
                 <label for="pic" class="form-label small text-muted"
@@ -91,23 +115,10 @@
                   id="pic"
                   name="entry.1383050238"
                   class="form-control form-control-sm"
+                  required
                 />
+                <div class="invalid-feedback">PIC harus diisi!</div>
               </div>
-              <div class="col-md-6">
-                <label for="SData" class="form-label small text-muted"
-                  >Source Data</label
-                >
-                <input
-                  type="text"
-                  id="SData"
-                  name="entry.499341626"
-                  class="form-control form-control-sm"
-                />
-              </div>
-            </div>
-
-            <!-- No Kawan and Task ID Polo -->
-            <div class="row mb-2">
               <div class="col-md-6">
                 <label for="NoKwn" class="form-label small text-muted"
                   >No Kawan Internal</label
@@ -117,8 +128,14 @@
                   id="NoKwn"
                   name="entry.1372652565"
                   class="form-control form-control-sm"
+                  required
                 />
+                <div class="invalid-feedback">No Kawan harus diisi!</div>
               </div>
+            </div>
+
+            <!-- Task ID Polo and No App -->
+            <div class="row mb-2">
               <div class="col-md-6">
                 <label for="IdPolo" class="form-label small text-muted"
                   >Task ID Polo</label
@@ -129,11 +146,8 @@
                   name="entry.163739172"
                   class="form-control form-control-sm"
                 />
+                <div class="invalid-feedback">Task ID Polo harus diisi!</div>
               </div>
-            </div>
-
-            <!-- No APP and No Odrn -->
-            <div class="row mb-2">
               <div class="col-md-6">
                 <label for="NoApp" class="form-label small text-muted"
                   >No APP</label
@@ -144,8 +158,13 @@
                   name="entry.66506618"
                   class="form-control form-control-sm"
                 />
+                <div class="invalid-feedback">No APP harus diisi!</div>
               </div>
-              <div class="col-md-6">
+            </div>
+
+            <!-- No Odrn -->
+            <div class="row mb-2">
+              <div class="col-md-12">
                 <label for="NoOdrn" class="form-label small text-muted"
                   >No Odrn</label
                 >
@@ -155,6 +174,7 @@
                   name="entry.996527903"
                   class="form-control form-control-sm"
                 />
+                <div class="invalid-feedback">No Odrn harus diisi!</div>
               </div>
             </div>
 
@@ -168,7 +188,9 @@
                 name="entry.902491819"
                 class="form-control form-control-sm"
                 rows="5"
+                required
               ></textarea>
+              <div class="invalid-feedback">Issue harus diisi!</div>
             </div>
 
             <!-- Buttons -->
@@ -201,63 +223,196 @@
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
     <script>
+      // Ambil data dari file region.json dan isi dropdown
+      // Fungsi untuk memuat dropdown Region dan Cabang
+      function loadRegionData() {
+        fetch("region.json") // Pastikan path JSON sesuai dengan lokasi file Anda
+          .then((response) => response.json())
+          .then((data) => {
+            // Dapatkan elemen select untuk region dan cabang
+            const regionSelect = document.getElementById("region");
+            const cabangSelect = document.getElementById("cabang");
+
+            // Clear existing options
+            regionSelect.innerHTML =
+              '<option value="">-- Pilih Region --</option>';
+            cabangSelect.innerHTML =
+              '<option value="">-- Pilih Cabang --</option>';
+
+            // Menambahkan option untuk region
+            const regions = [...new Set(data.map((item) => item.REGION_NAME))]; // Mengambil region yang unik
+            regions.forEach((region) => {
+              const option = document.createElement("option");
+              option.value = region;
+              option.textContent = region;
+              regionSelect.appendChild(option);
+            });
+
+            // Menambahkan event listener untuk mengubah cabang saat region dipilih
+            regionSelect.addEventListener("change", function () {
+              const selectedRegion = regionSelect.value;
+              if (selectedRegion) {
+                // Menampilkan cabang berdasarkan region yang dipilih
+                const filteredCabangs = data.filter(
+                  (item) => item.REGION_NAME === selectedRegion
+                );
+                cabangSelect.innerHTML =
+                  '<option value="">-- Pilih Cabang --</option>'; // Clear existing options
+                filteredCabangs.forEach((item) => {
+                  const option = document.createElement("option");
+                  option.value = item.COMP_OFFICE_NAME;
+                  option.textContent = item.COMP_OFFICE_NAME;
+                  cabangSelect.appendChild(option);
+                });
+              }
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching region data:", error);
+          });
+      }
+
+      // Fungsi untuk validasi dan set required fields
+      function updateRequiredFields(errorSystem) {
+        // Hapus tanda '*' dari semua label sebelum menambahkan yang baru
+        const labels = document.querySelectorAll("label");
+        labels.forEach((label) => {
+          const star = label.querySelector(".text-danger");
+          if (star) {
+            star.remove();
+          }
+        });
+
+        // Menambahkan tanda '*' sesuai dengan pilihan errorSystem
+        if (errorSystem === "ki") {
+          document.querySelector('label[for="region"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="cabang"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="brand"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="NCust"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="pic"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="NoKwn"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="issue"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+        } else if (errorSystem === "mss" || errorSystem === "wise") {
+          document.querySelector('label[for="region"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="cabang"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="NCust"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="pic"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="NoKwn"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="issue"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="IdPolo"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+        } else if (errorSystem === "login") {
+          document.querySelector('label[for="region"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="cabang"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="pic"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="issue"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+        }
+      }
+
+      // Event listener untuk validasi saat form disubmit
       document
         .getElementById("faqForm")
         .addEventListener("submit", function (e) {
           e.preventDefault();
 
-          const brand = document.getElementById("brand").value;
-          let formUrl;
+          // Ambil nilai field dari form
+          const errorSystem = document.getElementById("errorSystem").value;
+          const region = document.getElementById("region").value;
+          const cabang = document.getElementById("cabang").value;
+          const NCust = document.getElementById("NCust").value;
+          const pic = document.getElementById("pic").value;
+          const NoKwn = document.getElementById("NoKwn").value;
+          const issue = document.getElementById("issue").value;
+          const IdPolo = document.getElementById("IdPolo").value;
 
-          // Tentukan URL form berdasarkan brand
-          switch (brand) {
-            case "mas":
-              formUrl =
-                "https://docs.google.com/forms/d/e/1FAIpQLSeICODvzS46C_yN3W7G2WPq9QnN5FAZcj_Cm1KiDu52akapuA/formResponse";
-              break;
-            case "nb":
-              formUrl =
-                "https://docs.google.com/forms/d/e/1FAIpQLSdAIIAXXpbDmdO8qtWnyAgutCopPTGDhL5-tprvCKts1yZG0w/formResponse";
-              break;
-            case "mbl":
-              formUrl =
-                "https://docs.google.com/forms/d/e/1FAIpQLSeUfH1Y4ct2KJXm6dVIvb8yO44qWGfJpVAP9M-TFSgrg2PDzQ/formResponse";
-              break;
-            case "mtr":
-              formUrl =
-                "https://docs.google.com/forms/d/e/1FAIpQLSdnVEYF8LUO_irXpkrQSBKWIG__fh3tw4ClkqtNwFfKB2SB2Q/formResponse";
-              break;
-            default:
-              Swal.fire("Error", "Pilih brand terlebih dahulu!", "error");
-              return;
+          // Validasi berdasarkan error system
+          let valid = true;
+          let message = "";
+
+          if (errorSystem === "ki") {
+            if (!region || !cabang || !NCust || !pic || !NoKwn || !issue) {
+              valid = false;
+              message =
+                "Harap lengkapi semua field yang wajib diisi untuk Error Sistem KI!";
+            }
+          } else if (errorSystem === "mss" || errorSystem === "wise") {
+            if (
+              !region ||
+              !cabang ||
+              !NCust ||
+              !pic ||
+              !NoKwn ||
+              !issue ||
+              !IdPolo
+            ) {
+              valid = false;
+              message =
+                "Harap lengkapi semua field yang wajib diisi untuk Error Sistem MSS/WISE!";
+            }
+          } else if (errorSystem === "login") {
+            if (!region || !cabang || !pic || !issue) {
+              valid = false;
+              message =
+                "Harap lengkapi semua field yang wajib diisi untuk Error Sistem Login!";
+            }
+          } else {
+            valid = false;
+            message = "Pilih Error Sistem yang valid!";
           }
 
-          // Menampilkan halaman "Menunggu"
-          Swal.fire({
-            title: "Menunggu...",
-            text: "Formulir sedang diproses.",
-            icon: "info",
-            showConfirmButton: false,
-            allowOutsideClick: false,
-          });
+          if (!valid) {
+            Swal.fire("Error", message, "error");
+          } else {
+            // Tentukan link Google Form berdasarkan Brand
+            let googleFormLink = "";
+            const brand = document.getElementById("brand").value;
 
-          // Konfirmasi pengiriman
-          const form = document.getElementById("faqForm");
-          form.action = formUrl;
-          form.method = "POST";
-          form.submit();
-
-          // Menunggu hingga pengiriman selesai
-          setTimeout(function () {
-            // Simulasi pengiriman sukses atau gagal
-            const success = true; // Setel ke false untuk gagal
-
-            if (success) {
-              Swal.fire("Berhasil!", "Formulir berhasil dikirim.", "success");
+            if (brand === "nb") {
+              googleFormLink = "https://link-to-google-form-reguler.com";
+            } else if (brand === "mas") {
+              googleFormLink = "https://link-to-google-form-masKu.com";
+            } else if (brand === "mtr") {
+              googleFormLink = "https://link-to-google-form-motorKu.com";
+            } else if (brand === "mbl") {
+              googleFormLink = "https://link-to-google-form-mobilKu.com";
             } else {
-              Swal.fire("Gagal!", "Pengiriman formulir gagal.", "error");
+              valid = false;
+              message = "Pilih brand yang valid!";
             }
-          }, 2000); // Waktu tunggu untuk simulasi
+
+            if (valid) {
+              window.location.href = googleFormLink;
+            }
+          }
+        });
+
+      // Load region data saat halaman dimuat
+      document.addEventListener("DOMContentLoaded", function () {
+        loadRegionData();
+      });
+      // Event listener untuk dropdown error system
+      document
+        .getElementById("errorSystem")
+        .addEventListener("change", function () {
+          const errorSystem = this.value;
+          updateRequiredFields(errorSystem); // Panggil fungsi dengan parameter yang sesuai
         });
     </script>
   </body>
