@@ -131,6 +131,7 @@
             <button
               type="button"
               class="btn-close"
+              id="btnClose"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
@@ -591,6 +592,18 @@
 
         paginationControls.innerHTML = "";
         hideLoading(1000); // Tambahkan durasi tambahan
+      });
+
+      // Handle Close Button
+      document.getElementById("btnClose").addEventListener("click", () => {
+        document.getElementById("searchSistem").value = "";
+        document.getElementById("searchFeature").value = "";
+        document.getElementById("searchKendala").value = "";
+
+        searchResults.innerHTML =
+          '<tr><td colspan="3" class="text-center small">Tidak ada hasil.</td></tr>';
+
+        paginationControls.innerHTML = "";
       });
 
       // merubah tampilan table agar responsive
