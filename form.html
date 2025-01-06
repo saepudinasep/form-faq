@@ -46,7 +46,11 @@
                 <label for="errorSystem" class="form-label small text-muted"
                   >Error Sistem</label
                 >
-                <select id="errorSystem" class="form-select form-select-sm">
+                <select
+                  id="errorSystem"
+                  name="entry.900671353"
+                  class="form-select form-select-sm"
+                >
                   <option value="">-- Pilih Error Sistem --</option>
                   <option value="ki">KI</option>
                   <option value="mss">MSS</option>
@@ -62,7 +66,11 @@
                 <label for="region" class="form-label small text-muted"
                   >Region</label
                 >
-                <select id="region" class="form-select form-select-sm">
+                <select
+                  id="region"
+                  name="entry.453750574"
+                  class="form-select form-select-sm"
+                >
                   <option value="">-- Pilih Region --</option>
                   <!-- Region options will be added dynamically -->
                 </select>
@@ -71,7 +79,11 @@
                 <label for="cabang" class="form-label small text-muted"
                   >Cabang</label
                 >
-                <select id="cabang" class="form-select form-select-sm">
+                <select
+                  id="cabang"
+                  name="entry.27483305"
+                  class="form-select form-select-sm"
+                >
                   <option value="">-- Pilih Cabang --</option>
                   <!-- Cabang options will be added dynamically -->
                 </select>
@@ -385,20 +397,45 @@
             const brand = document.getElementById("brand").value;
 
             if (brand === "nb") {
-              googleFormLink = "https://link-to-google-form-reguler.com";
+              googleFormLink =
+                "https://docs.google.com/forms/d/e/1FAIpQLSdAIIAXXpbDmdO8qtWnyAgutCopPTGDhL5-tprvCKts1yZG0w/formResponse";
             } else if (brand === "mas") {
-              googleFormLink = "https://link-to-google-form-masKu.com";
+              googleFormLink =
+                "https://docs.google.com/forms/d/e/1FAIpQLSeICODvzS46C_yN3W7G2WPq9QnN5FAZcj_Cm1KiDu52akapuA/formResponse";
             } else if (brand === "mtr") {
-              googleFormLink = "https://link-to-google-form-motorKu.com";
+              googleFormLink =
+                "https://docs.google.com/forms/d/e/1FAIpQLSdnVEYF8LUO_irXpkrQSBKWIG__fh3tw4ClkqtNwFfKB2SB2Q/formResponse";
             } else if (brand === "mbl") {
-              googleFormLink = "https://link-to-google-form-mobilKu.com";
+              googleFormLink =
+                "https://docs.google.com/forms/d/e/1FAIpQLSeUfH1Y4ct2KJXm6dVIvb8yO44qWGfJpVAP9M-TFSgrg2PDzQ/formResponse";
             } else {
               valid = false;
               message = "Pilih brand yang valid!";
             }
 
             if (valid) {
-              window.location.href = googleFormLink;
+              // window.location.href = googleFormLink;
+              // Konfirmasi pengiriman
+              const form = document.getElementById("faqForm");
+              form.action = googleFormLink;
+              form.method = "POST";
+              form.submit();
+
+              // Menunggu hingga pengiriman selesai
+              setTimeout(function () {
+                // Simulasi pengiriman sukses atau gagal
+                const success = true; // Setel ke false untuk gagal
+
+                if (success) {
+                  Swal.fire(
+                    "Berhasil!",
+                    "Formulir berhasil dikirim.",
+                    "success"
+                  );
+                } else {
+                  Swal.fire("Gagal!", "Pengiriman formulir gagal.", "error");
+                }
+              }, 2000); // Waktu tunggu untuk simulasi
             }
           }
         });
