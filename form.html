@@ -311,7 +311,7 @@
             ' <span class="text-danger">*</span>';
           document.querySelector('label[for="issue"]').innerHTML +=
             ' <span class="text-danger">*</span>';
-        } else if (errorSystem === "mss" || errorSystem === "wise") {
+        } else if (errorSystem === "mss") {
           document.querySelector('label[for="region"]').innerHTML +=
             ' <span class="text-danger">*</span>';
           document.querySelector('label[for="cabang"]').innerHTML +=
@@ -320,11 +320,24 @@
             ' <span class="text-danger">*</span>';
           document.querySelector('label[for="pic"]').innerHTML +=
             ' <span class="text-danger">*</span>';
-          document.querySelector('label[for="NoKwn"]').innerHTML +=
+          document.querySelector('label[for="NoOdrn"]').innerHTML +=
             ' <span class="text-danger">*</span>';
           document.querySelector('label[for="issue"]').innerHTML +=
             ' <span class="text-danger">*</span>';
           document.querySelector('label[for="IdPolo"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+        } else if (errorSystem === "wise") {
+          document.querySelector('label[for="region"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="cabang"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="NCust"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="pic"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="NoApp"]').innerHTML +=
+            ' <span class="text-danger">*</span>';
+          document.querySelector('label[for="issue"]').innerHTML +=
             ' <span class="text-danger">*</span>';
         } else if (errorSystem === "login") {
           document.querySelector('label[for="region"]').innerHTML +=
@@ -351,6 +364,8 @@
           const NCust = document.getElementById("NCust").value;
           const pic = document.getElementById("pic").value;
           const NoKwn = document.getElementById("NoKwn").value;
+          const NoOdrn = document.getElementById("NoOdrn").value;
+          const NoApp = document.getElementById("NoApp").value;
           const issue = document.getElementById("issue").value;
           const IdPolo = document.getElementById("IdPolo").value;
 
@@ -364,19 +379,25 @@
               message =
                 "Harap lengkapi semua field yang wajib diisi untuk Error Sistem KI!";
             }
-          } else if (errorSystem === "mss" || errorSystem === "wise") {
+          } else if (errorSystem === "mss") {
             if (
               !region ||
               !cabang ||
               !NCust ||
               !pic ||
-              !NoKwn ||
+              !NoOdrn ||
               !issue ||
               !IdPolo
             ) {
               valid = false;
               message =
-                "Harap lengkapi semua field yang wajib diisi untuk Error Sistem MSS/WISE!";
+                "Harap lengkapi semua field yang wajib diisi untuk Error Sistem MSS!";
+            }
+          } else if (errorSystem === "wise") {
+            if (!region || !cabang || !NCust || !pic || !NoApp || !issue) {
+              valid = false;
+              message =
+                "Harap lengkapi semua field yang wajib diisi untuk Error Sistem WISE!";
             }
           } else if (errorSystem === "login") {
             if (!region || !cabang || !pic || !issue) {
@@ -451,6 +472,8 @@
           const errorSystem = this.value;
           updateRequiredFields(errorSystem); // Panggil fungsi dengan parameter yang sesuai
         });
+
+      // region dan cabang belum terkirim datanya
     </script>
   </body>
 </html>
